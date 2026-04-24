@@ -1,0 +1,57 @@
+name: Bug report
+description: Report unexpected behavior in Cool Reader
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Numbered steps so we can reproduce the issue.
+      placeholder: |
+        1. Open …
+        2. Click …
+        3. See error …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser name and version, and how you opened the app (e.g. localhost static server vs file://).
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: Sample markdown (optional)
+      description: If the bug involves rendering, paste a minimal markdown snippet.
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Security
+      options:
+        - label: This is NOT a security vulnerability (for security, see SECURITY.md instead).
+          required: true

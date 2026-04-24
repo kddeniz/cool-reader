@@ -10,7 +10,19 @@
   var fileInput = document.getElementById("fileInput");
   var downloadBtn = document.getElementById("downloadBtn");
   var dropZone = document.getElementById("dropZone");
+  var appAlert = document.getElementById("appAlert");
   var renderTimer = null;
+
+  function setAppAlert(message) {
+    if (!appAlert) return;
+    if (!message) {
+      appAlert.textContent = "";
+      appAlert.hidden = true;
+      return;
+    }
+    appAlert.textContent = message;
+    appAlert.hidden = false;
+  }
 
   function getMarkdownText() {
     return editor.value;
@@ -18,10 +30,13 @@
 
   function renderPreview() {
     if (typeof marked === "undefined" || typeof DOMPurify === "undefined") {
-      preview.innerHTML =
-        "<p>Önizleme için <code>marked</code> ve <code>DOMPurify</code> yüklenemedi. Ağ bağlantısını kontrol edin.</p>";
+      preview.innerHTML = "";
+      setAppAlert(
+        "Önizleme için marked ve DOMPurify yüklenemedi. Ağ bağlantısını kontrol edin veya sayfayı yenileyin."
+      );
       return;
     }
+    setAppAlert("");
     var raw = getMarkdownText();
     var html = marked.parse(raw);
     preview.innerHTML = DOMPurify.sanitize(html);
@@ -73,9 +88,10 @@
   function applyFileContent(file) {
     readFileAsText(file, function (err, text) {
       if (err) {
-        preview.textContent = "Dosya okunamadı: " + String(err.message || err);
+        setAppAlert("Dosya okunamadı: " + String(err.message || err));
         return;
       }
+      setAppAlert("");
       editor.value = text;
       renderNow();
       editor.focus();

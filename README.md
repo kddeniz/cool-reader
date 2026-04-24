@@ -16,7 +16,7 @@
 
 🚀 **[Live demo](https://cool-reader.com/)** · **📦 [Source on GitHub](https://github.com/kddeniz/cool-reader)**
 
-**Quick facts (for humans and AI summaries):** MIT License · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via CDN · Preview updates debounced at 120ms.
+**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via jsDelivr with **SRI** · Google Fonts for typography · Preview updates debounced at 120ms · CI: HTML validate + ESLint + Playwright on PRs to `main`.
 
 ### Key Features
 
@@ -43,9 +43,13 @@
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Page skeleton, toolbar, two-panel layout, CDN dependencies for `marked` and `DOMPurify` |
+| `index.html` | Page skeleton, toolbar, two-panel layout, CDN dependencies for `marked` and `DOMPurify` (pinned + SRI) |
 | `styles.css` | Responsive layout (~50/50 panels), reading mode for left panel, preview typography |
 | `app.js` | Preview rendering with debounce, file handling, drag-and-drop, download functionality, panel toggle |
+| `schema-ld.json` | JSON-LD metadata for search engines (loaded as external `script` to align with CSP) |
+| `staticwebapp.config.json` | Azure Static Web Apps global headers (CSP, `nosniff`, etc.) |
+| `.github/workflows/ci.yml` | Quality checks: `html-validate`, ESLint, Playwright |
+| `package.json` | **Dev-only** tooling (not required to run the app in a browser) |
 
 ### Architecture Constraints
 
@@ -61,16 +65,24 @@ When adding features, maintain these constraints to keep the application lightwe
 
 Markdown-generated HTML is sanitized with **DOMPurify** before being inserted into the DOM via `innerHTML`. This prevents malicious scripts from being executed. When adding new features, be cautious of any raw HTML injection risks.
 
+- **Reporting:** see [`SECURITY.md`](SECURITY.md) for how to disclose vulnerabilities responsibly.
+- **Supply chain:** third-party scripts use pinned versions and **Subresource Integrity** (`integrity` on `<script>` tags).
+- **Hosting:** when deployed on Azure Static Web Apps, [`staticwebapp.config.json`](staticwebapp.config.json) adds defense-in-depth headers (including a CSP aligned with this repo’s third-party origins).
+
 ### Dependencies
 
 - **[marked](https://marked.js.org/)** (v12.0.2 via CDN) - Markdown parser
 - **[DOMPurify](https://github.com/cure53/DOMPurify)** (v3.1.6 via CDN) - HTML sanitizer
 
-Both are loaded from CDN. For offline use, download these libraries locally and update the script paths in `index.html`.
+Both are loaded from jsDelivr with SRI. **Google Fonts** are loaded from `fonts.googleapis.com` / `fonts.gstatic.com` (stylesheet URLs are not practical to pin with SRI the same way as single-file scripts; for stricter offline/privacy needs, self-host fonts and remove the Google `<link>` tags).
+
+For offline use, vendor `marked` and `DOMPurify` locally, update `index.html` script `src` paths, and **recompute SRI hashes** for the new files.
 
 ### Common questions
 
 **Does Cool Reader send my Markdown to a server?** No. Parsing and sanitization run entirely in your browser; this repository does not include a telemetry or upload pipeline.
+
+**Does opening the app contact third parties?** Yes, for fonts (Google Fonts) and for the pinned parser/sanitizer scripts (jsDelivr). Your markdown content itself is not uploaded by this app.
 
 **Can I use it offline?** After the first load you still need the bundled or CDN scripts; for fully offline use, vendor `marked` and `DOMPurify` locally and point `index.html` to those files.
 
@@ -95,18 +107,28 @@ python3 -m http.server 8000
 
 Modern JavaScript features (ES5+) are used. Older browsers may need polyfills.
 
+### Development checks (optional)
+
+If you want to run the same checks as CI locally, install [Node.js](https://nodejs.org/) 20+ and run:
+
+```bash
+npm ci
+npm run validate:html
+npm run lint
+npm test
+```
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for more detail.
+
 ### Contributing
 
-Feel free to contribute by:
-- Reporting bugs
-- Suggesting features
-- Submitting pull requests
+Start with [`CONTRIBUTING.md`](CONTRIBUTING.md) (setup, PR expectations, and scripts).
 
-When contributing, please follow the guidelines in [.cursor/rules/cool-reader.mdc](.cursor/rules/cool-reader.mdc) and update [claude.md](claude.md) with any changes to project structure or architecture.
+Optional Cursor-specific guidance lives in [.cursor/rules/cool-reader.mdc](.cursor/rules/cool-reader.mdc). Meaningful architecture changes should also be reflected in [claude.md](claude.md).
 
 ### License
 
-MIT License - Feel free to use this project for personal or commercial purposes.
+This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 
 ---
 
@@ -118,7 +140,7 @@ MIT License - Feel free to use this project for personal or commercial purposes.
 
 🚀 **[Canlı demo](https://cool-reader.com/)** · **📦 [Kaynak kodu (GitHub)](https://github.com/kddeniz/cool-reader)**
 
-**Hızlı bilgiler:** MIT Lisansı · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2 (ayrıştırma) ve [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (temizleme), CDN üzerinden · Önizleme güncellemeleri 120ms debounce ile.
+**Hızlı bilgiler:** MIT Lisansı ([`LICENSE`](LICENSE)) · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2 ve [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6, jsDelivr üzerinden **SRI** ile · Tipografi için Google Fonts · Önizleme 120ms debounce · CI: `main` PR’larında HTML doğrulama + ESLint + Playwright.
 
 ### Temel Özellikler
 
@@ -145,9 +167,13 @@ MIT License - Feel free to use this project for personal or commercial purposes.
 
 | Dosya | Amacı |
 |-------|-------|
-| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel düzeni, `marked` ve `DOMPurify` için CDN bağımlılıkları |
+| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel düzeni, `marked` ve `DOMPurify` için sabitlenmiş CDN + SRI |
 | `styles.css` | Duyarlı düzen (~%50-%50 paneller), sol panel için okuma modu, önizleme tipografisi |
 | `app.js` | Debounce ile önizleme işlemesi, dosya işlemleri, sürükle-bırak, indirme işlevi, panel aç/kapat |
+| `schema-ld.json` | Arama motorları için JSON-LD (CSP ile uyum için harici `script` olarak) |
+| `staticwebapp.config.json` | Azure Static Web Apps genel başlıkları (CSP, `nosniff`, vb.) |
+| `.github/workflows/ci.yml` | Kalite: `html-validate`, ESLint, Playwright |
+| `package.json` | **Yalnızca geliştirme** araçları (uygulamayı tarayıcıda çalıştırmak için gerekmez) |
 
 ### Mimari Kısıtlar
 
@@ -163,18 +189,26 @@ MIT License - Feel free to use this project for personal or commercial purposes.
 
 Markdown tarafından üretilen HTML, `innerHTML` aracılığıyla DOM'a eklenmeden önce **DOMPurify** ile temizlenir. Bu, kötü amaçlı betiklerin yürütülmesini önler. Yeni özellikler eklerken, ham HTML enjeksiyonu risklerine dikkat edin.
 
+- **Bildirim:** [`SECURITY.md`](SECURITY.md) dosyasındaki süreçle güvenlik açıklarını özel kanaldan iletin.
+- **Tedarik zinciri:** Üçüncü taraf betikler sabit sürüm + **SRI** (`integrity`) ile yüklenir.
+- **Barındırma:** Azure Static Web Apps üzerinde [`staticwebapp.config.json`](staticwebapp.config.json) ek savunma başlıkları (CSP dahil) sağlar.
+
 ### Bağımlılıklar
 
-- **[marked](https://marked.js.org/)** (CDN üzerinden v12.0.2) - Markdown ayrıştırıcı
-- **[DOMPurify](https://github.com/cure53/DOMPurify)** (CDN üzerinden v3.1.6) - HTML temizleyici
+- **[marked](https://marked.js.org/)** (jsDelivr, v12.0.2, SRI ile) - Markdown ayrıştırıcı
+- **[DOMPurify](https://github.com/cure53/DOMPurify)** (jsDelivr, v3.1.6, SRI ile) - HTML temizleyici
 
-Her ikisi de CDN'den yüklenir. Çevrimdışı kullanım için bu kütüphaneleri yerel olarak indirin ve `index.html` içinde betik yollarını güncelleyin.
+**Google Fonts** `fonts.googleapis.com` / `fonts.gstatic.com` üzerinden yüklenir (tek dosya betikleri gibi SRI ile sabitlemek zordur; daha katı gizlilik/çevrimdışı için fontları self-host edip Google `<link>` etiketlerini kaldırın).
+
+Çevrimdışı kullanım için bu kütüphaneleri yerel olarak indirin, `index.html` içindeki `src` yollarını güncelleyin ve **SRI özetlerini yeniden hesaplayın**.
 
 ### Sık sorulanlar
 
 **Markdown'ım bir sunucuya gönderiliyor mu?** Hayır. Ayrıştırma ve temizleme tamamen tarayıcıda çalışır; bu depoda telemetri veya yükleme hattı yoktur.
 
-**Çevrimdışı kullanabilir miyim?** İlk yüklemeden sonra da betiklere ihtiyaç vardır; tam çevrimdışı için `marked` ve `DOMPurify` dosyalarını yerel olarak ekleyip `index.html` içindeki yolları onlara yönlendirin.
+**Uygulama üçüncü taraflara bağlanıyor mu?** Evet: fontlar (Google Fonts) ve sabitlenmiş betikler (jsDelivr). Markdown içeriğiniz bu uygulama tarafından yüklenmez.
+
+**Çevrimdışi kullanabilir miyim?** İlk yüklemeden sonra da betiklere ihtiyaç vardır; tam çevrimdışı için `marked` ve `DOMPurify` dosyalarını yerel olarak ekleyip `index.html` içindeki yolları onlara yönlendirin.
 
 ### Nasıl Çalıştırılır
 
@@ -197,18 +231,28 @@ python3 -m http.server 8000
 
 Modern JavaScript özellikleri (ES5+) kullanılmıştır. Eski tarayıcılar polyfill gerektirebilir.
 
+### Geliştirme kontrolleri (isteğe bağlı)
+
+CI ile aynı kontrolleri yerelde çalıştırmak için [Node.js](https://nodejs.org/) 20+ kurun:
+
+```bash
+npm ci
+npm run validate:html
+npm run lint
+npm test
+```
+
+Ayrıntılar için [`CONTRIBUTING.md`](CONTRIBUTING.md) dosyasına bakın.
+
 ### Katkıda Bulunma
 
-Aşağıdaki yollarla katkıda bulunabilirsiniz:
-- Hataları rapor edin
-- Özellik önerileri sunun
-- Pull request'ler gönderin
+Önce [`CONTRIBUTING.md`](CONTRIBUTING.md) dosyasını okuyun (kurulum, PR beklentileri, komutlar).
 
-Katkıda bulunurken, lütfen [.cursor/rules/cool-reader.mdc](.cursor/rules/cool-reader.mdc) içindeki yönergeleri izleyin ve proje yapısı veya mimarisindeki değişiklikleri [claude.md](claude.md) içinde güncelleyin.
+İsteğe bağlı Cursor yönergeleri: [.cursor/rules/cool-reader.mdc](.cursor/rules/cool-reader.mdc). Mimari değişikliklerde [claude.md](claude.md) dosyasını da güncelleyin.
 
 ### Lisans
 
-MIT Lisansı - Bu projeyi kişisel veya ticari amaçlar için kullanmaktan çekinmeyin.
+Bu proje MIT Lisansı altındadır — ayrıntılar için [`LICENSE`](LICENSE) dosyasına bakın.
 
 ---
 

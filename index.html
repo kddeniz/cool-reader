@@ -25,35 +25,7 @@
       name="twitter:description"
       content="Browser-only markdown editor: live preview, file open/export, DOMPurify sanitization."
     />
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "SoftwareApplication",
-        "name": "Cool Reader",
-        "applicationCategory": "DeveloperApplication",
-        "operatingSystem": "Web browser",
-        "description": "Client-side markdown editor with live HTML preview, file open and download, drag-and-drop, and DOMPurify-sanitized rendering. No server required.",
-        "url": "https://cool-reader.com/",
-        "isAccessibleForFree": true,
-        "license": "https://opensource.org/licenses/MIT",
-        "softwareVersion": "1.0",
-        "author": {
-          "@type": "Person",
-          "name": "Kürşad"
-        },
-        "featureList": [
-          "Live markdown to HTML preview with debounced updates",
-          "Open and edit .md, .markdown, and .txt in the browser",
-          "Download edited markdown as .md",
-          "Drag-and-drop file load onto the editor",
-          "HTML sanitized with DOMPurify before DOM insertion"
-        ],
-        "softwareHelp": {
-          "@type": "CreativeWork",
-          "url": "https://github.com/kddeniz/cool-reader"
-        }
-      }
-    </script>
+    <script type="application/ld+json" src="schema-ld.json"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -61,8 +33,16 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"
+      integrity="sha384-/TQbtLCAerC3jgaim+N78RZSDYV7ryeoBCVqTuzRrFec2akfBkHS7ACQ3PQhvMVi"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"
+      integrity="sha384-+VfUPEb0PdtChMwmBcBmykRMDd+v6D/oFmB3rZM/puCMDYcIvF968OimRh4KQY9a"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div class="app" id="app">
@@ -96,6 +76,7 @@
           </button>
         </div>
       </header>
+      <div id="appAlert" class="app-alert" role="alert" aria-live="assertive" hidden></div>
       <main class="main">
         <section class="pane pane--editor" id="editorPane">
           <div class="pane__inner pane__inner--editor" id="dropZone">
@@ -103,6 +84,7 @@
               id="editor"
               class="editor"
               spellcheck="false"
+              aria-label="Markdown düzenleyici"
               placeholder="Markdown yazın veya dosya sürükleyin…"
             ></textarea>
           </div>

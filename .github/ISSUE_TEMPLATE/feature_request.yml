@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest an improvement or new capability
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cool Reader stays **browser-only** (no backend). Requests that fit that scope are easiest to accept.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What user problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the behavior you want. Mockups or examples help.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Optional — other ways you considered solving it.
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints
+      options:
+        - label: I understand this project does not add a backend server or database.
+          required: true

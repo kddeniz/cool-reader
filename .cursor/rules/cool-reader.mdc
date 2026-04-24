@@ -9,5 +9,8 @@ alwaysApply: true
 - **Yalnızca istemci:** Statik HTML, CSS ve JavaScript. Sunucu tarafı kod, backend API veya veritabanı eklenmez.
 - **Önizleme güvenliği:** Markdown’dan üretilen HTML mutlaka sanitize edilmeli (ör. DOMPurify). Ham kullanıcı içeriği güvenilmüş sayılmaz.
 - **Bağımlılıklar:** Mümkünse CDN sürümleri sabitlenir; üretimde SRI (`integrity`) tercih edilir.
-- **Erişilebilirlik:** Etkileşimli kontrollerde uygun `button` kullanımı, `aria-label` / `aria-expanded` gibi nitelikler korunur.
-- **Dokümantasyon:** Anlamlı davranış veya mimari değişikliklerde `claude.md` güncellenir; bu kural dosyası gerektiğinde eşlenir.
+- **Hosting:** Azure Static Web Apps kullanılıyorsa `staticwebapp.config.json` güvenlik başlıkları (CSP dahil) uygulamanın gerçek kaynak listesiyle uyumlu kalmalıdır.
+- **JSON-LD:** Mümkünse inline `<script type="application/ld+json">` yerine harici `schema-ld.json` + `src` (CSP ile uyum).
+- **Erişilebilirlik:** Etkileşimli kontrollerde uygun `button` kullanımı, `aria-label` / `aria-expanded` gibi nitelikler korunur; ana editörde klavye ile görünür `:focus-visible` halkası korunur; hata mesajları `#appAlert` (`role="alert"`) üzerinden verilir.
+- **CI:** `npm run validate:html`, `npm run lint`, `npm test` (Playwright) PR’larda yeşil kalmalıdır.
+- **Dokümantasyon:** Anlamlı davranış veya mimari değişikliklerde `claude.md` ve gerekiyorsa `README.md` / `CHANGELOG.md` güncellenir; bu kural dosyası gerektiğinde eşlenir.

@@ -1,1 +1,10 @@
 .cursor/skills/
+
+# Node / tooling (optional dev dependencies)
+node_modules/
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
+playwright/.cache/
