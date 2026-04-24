@@ -10,11 +10,11 @@
     "test:headed": "playwright test --headed"
   },
   "devDependencies": {
-    "@eslint/js": "^9.20.0",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.50.0",
-    "eslint": "^9.20.0",
-    "globals": "^15.14.0",
-    "html-validate": "^9.0.0",
+    "eslint": "^10.2.1",
+    "globals": "^17.5.0",
+    "html-validate": "^10.13.1",
     "turndown": "^7.2.0"
   },
   "engines": {
