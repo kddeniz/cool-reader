@@ -1,0 +1,13 @@
+---
+description: Kool Reader — statik markdown editör kuralları
+globs: "**/*.{html,css,js,md}"
+alwaysApply: true
+---
+
+# Kool Reader
+
+- **Yalnızca istemci:** Statik HTML, CSS ve JavaScript. Sunucu tarafı kod, backend API veya veritabanı eklenmez.
+- **Önizleme güvenliği:** Markdown’dan üretilen HTML mutlaka sanitize edilmeli (ör. DOMPurify). Ham kullanıcı içeriği güvenilmüş sayılmaz.
+- **Bağımlılıklar:** Mümkünse CDN sürümleri sabitlenir; üretimde SRI (`integrity`) tercih edilir.
+- **Erişilebilirlik:** Etkileşimli kontrollerde uygun `button` kullanımı, `aria-label` / `aria-expanded` gibi nitelikler korunur.
+- **Dokümantasyon:** Anlamlı davranış veya mimari değişikliklerde `claude.md` güncellenir; bu kural dosyası gerektiğinde eşlenir.
