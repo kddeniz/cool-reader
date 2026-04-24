@@ -1,0 +1,11 @@
+# Cool Reader — https://cool-reader.com/
+# https://www.rfc-editor.org/rfc/rfc9309
+
+User-agent: *
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /

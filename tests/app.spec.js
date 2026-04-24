@@ -2,6 +2,15 @@
 const { test, expect } = require("@playwright/test");
 
 test.describe("Cool Reader", () => {
+  test("serves robots.txt as plain text", async ({ request }) => {
+    const res = await request.get("/robots.txt");
+    expect(res.status()).toBe(200);
+    expect(res.headers()["content-type"]).toMatch(/text\/plain/i);
+    const body = await res.text();
+    expect(body).toMatch(/User-agent:\s*\*/i);
+    expect(body).toMatch(/Allow:\s*\//);
+  });
+
   test("renders markdown preview", async ({ page }) => {
     await page.goto("/");
     await page.locator("#editor").fill("# Merhaba\n**Kalın**");
