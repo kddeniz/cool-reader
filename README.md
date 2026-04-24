@@ -14,6 +14,8 @@
 
 **Cool Reader** is a fast, browser-based markdown editor and preview tool. Write markdown on the left panel and see a live HTML preview on the right panel in real-time. No backend, no complexity—just pure client-side markdown editing.
 
+🚀 **[Try the Live Demo](https://cool-reader.com/)**
+
 ### Key Features
 
 - ✨ **Real-time Preview:** See your markdown rendered as you type with debounced updates (120ms) for smooth performance
@@ -105,6 +107,8 @@ MIT License - Feel free to use this project for personal or commercial purposes.
 ### Genel Bakış
 
 **Cool Reader**, hızlı ve tarayıcı tabanlı bir markdown editörü ve önizleyici aracıdır. Sol panelde markdown yazın, sağ panelde canlı HTML önizlemesini gerçek zamanda görün. Backend yok, karmaşıklık yok—tamamen istemci tarafı markdown düzenlemesi.
+
+🚀 **[Canlı Demo'yu Deneyin](https://cool-reader.com/)**
 
 ### Temel Özellikler
 
