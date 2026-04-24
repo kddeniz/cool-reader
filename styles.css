@@ -514,3 +514,11 @@ body {
     min-height: 0;
   }
 }
+
+/* Service-doc and help pages (e.g. docs/api.html) */
+.doc-surface {
+  min-height: 100vh;
+  padding: 1.5rem;
+  max-width: 42rem;
+  margin: 0 auto;
+}

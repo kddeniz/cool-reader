@@ -1,0 +1,7 @@
+{
+  "name": "Cool Reader",
+  "version": "1.1.0",
+  "description": "This application runs entirely in the web browser. There is no public HTTP API on this site.",
+  "url": "https://cool-reader.com/",
+  "apis": []
+}

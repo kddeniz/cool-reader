@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- [RFC 8288](https://www.rfc-editor.org/rfc/rfc8288) `Link` response headers on the home page (Azure Static Web Apps) plus a minimal `/.well-known/api-catalog` and `docs/api.html` for agent / machine discovery.
+
 ## [1.1.0] - 2026-04-24
 
 ### Added

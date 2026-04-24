@@ -20,6 +20,17 @@ test.describe("Cool Reader", () => {
     expect(body).toMatch(/<loc>https:\/\/cool-reader\.com\/<\/loc>/);
   });
 
+  test("homepage has Link response headers for agent discovery (RFC 8288)", async ({ request }) => {
+    const res = await request.get("/");
+    expect(res.status()).toBe(200);
+    const h = res.headers();
+    const link = h["link"] ?? h["Link"];
+    expect(link).toBeDefined();
+    expect(String(link)).toMatch(/<\/\.well-known\/api-catalog>;\s*rel="api-catalog"/i);
+    expect(String(link)).toMatch(/<\/docs\/api\.html>;\s*rel="service-doc"/i);
+    expect(String(link)).toMatch(/<\/schema-ld\.json>;\s*rel="describedby"/i);
+  });
+
   test("renders markdown preview", async ({ page }) => {
     await page.goto("/");
     await page.locator("#editor").fill("# Merhaba\n**Kalın**");

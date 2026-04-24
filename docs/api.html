@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cool Reader — “API” &amp; service surface (browser-only)</title>
+    <link rel="canonical" href="https://cool-reader.com/docs/api.html" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <main class="doc-surface">
+      <h1>Cool Reader: service description</h1>
+      <p>
+        Cool Reader is a <strong>static, client-only</strong> web application: markdown editing, live
+        HTML preview, and file open/download happen in the browser. This site does not host a
+        public REST or GraphQL API.
+      </p>
+      <h2>Machine-readable metadata</h2>
+      <p>
+        Structured data: <a href="../schema-ld.json"><code>schema-ld.json</code></a> (JSON-LD) —
+        suitable for the <code>rel="describedby"</code> link from the home page.
+      </p>
+      <h2>API catalog</h2>
+      <p>
+        A minimal catalog (empty <code>apis</code> list) is at
+        <a href="../.well-known/api-catalog"> <code>/.well-known/api-catalog</code> </a>, advertised
+        with <code>rel="api-catalog"</code>.
+      </p>
+      <p><a href="../">Back to the editor</a></p>
+    </main>
+  </body>
+</html>
