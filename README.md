@@ -198,6 +198,6 @@ MIT Lisansı - Bu projeyi kişisel veya ticari amaçlar için kullanmaktan çeki
 
 <div align="center">
 
-Made with ❤️ by [Your Name/Team]
+Made with ❤️ by Kürşad
 
 </div>
