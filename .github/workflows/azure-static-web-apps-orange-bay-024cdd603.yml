@@ -19,6 +19,8 @@ jobs:
         with:
           submodules: false
           lfs: false
+      - name: Generate sitemap
+        run: node scripts/generate-sitemap.mjs
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1

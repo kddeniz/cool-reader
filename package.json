@@ -3,6 +3,7 @@
   "private": true,
   "description": "Dev tooling only — the app ships as static HTML/CSS/JS (no runtime npm dependency).",
   "scripts": {
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "lint": "eslint app.js",
     "validate:html": "html-validate index.html",
     "test": "playwright test",

@@ -9,6 +9,15 @@ test.describe("Cool Reader", () => {
     const body = await res.text();
     expect(body).toMatch(/User-agent:\s*\*/i);
     expect(body).toMatch(/Allow:\s*\//);
+    expect(body).toMatch(/Sitemap:\s*https:\/\/cool-reader\.com\/sitemap\.xml/i);
+  });
+
+  test("serves sitemap.xml as XML with canonical URL", async ({ request }) => {
+    const res = await request.get("/sitemap.xml");
+    expect(res.status()).toBe(200);
+    const body = await res.text();
+    expect(body).toMatch(/xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"/);
+    expect(body).toMatch(/<loc>https:\/\/cool-reader\.com\/<\/loc>/);
   });
 
   test("renders markdown preview", async ({ page }) => {
