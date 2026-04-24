@@ -7,6 +7,11 @@ import http from "node:http";
 import { readFileSync, existsSync, statSync, createReadStream } from "node:fs";
 import { extname, join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  prefersMarkdown,
+  htmlToMarkdown,
+  estimateMarkdownTokens,
+} from "./markdown-negotiation.mjs";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const root = join(__dirname, "..");
@@ -104,6 +109,30 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  const ext = extname(filePath).toLowerCase();
+  const accept = req.headers.accept;
+  if (ext === ".html" && prefersMarkdown(accept)) {
+    const html = readFileSync(filePath, "utf8");
+    const markdown = htmlToMarkdown(html);
+    const tokens = estimateMarkdownTokens(markdown);
+    const headers = firstRouteHeaders(pathname);
+    delete headers["content-type"];
+    delete headers["Content-Type"];
+    headers["Content-Type"] = "text/markdown; charset=utf-8";
+    headers.Vary = "Accept";
+    headers["x-markdown-tokens"] = String(tokens);
+    const buf = Buffer.from(markdown, "utf8");
+    headers["Content-Length"] = String(buf.length);
+    if (req.method === "HEAD") {
+      res.writeHead(200, headers);
+      res.end();
+      return;
+    }
+    res.writeHead(200, headers);
+    res.end(buf);
+    return;
+  }
+
   const headers = firstRouteHeaders(pathname);
   if (!headers["content-type"] && !headers["Content-Type"]) {
     if (pathname === "/.well-known/api-catalog" || filePath.endsWith("api-catalog")) {
@@ -111,6 +140,9 @@ const server = http.createServer((req, res) => {
     } else {
       headers["Content-Type"] = getMime(filePath);
     }
+  }
+  if (ext === ".html") {
+    headers.Vary = headers.Vary ? `${headers.Vary}, Accept` : "Accept";
   }
   if (req.method === "HEAD") {
     res.writeHead(200, headers);
@@ -122,6 +154,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(port, "127.0.0.1", () => {
-  // eslint-disable-next-line no-console -- process stdout for local dev
   console.error(`playwright-serve: http://127.0.0.1:${port}/ (root ${root})`);
 });

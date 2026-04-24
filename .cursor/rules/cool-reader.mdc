@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Cool Reader
 
-- **Yalnızca istemci:** Statik HTML, CSS ve JavaScript. Sunucu tarafı kod, backend API veya veritabanı eklenmez.
+- **Yalnızca istemci:** Statik HTML, CSS ve JavaScript. Sunucu tarafı kod, backend API veya veritabanı eklenmez (Playwright için `scripts/playwright-serve.mjs` içi `Accept: text/markdown` anlaşması bu kuralın dışında, yalnız yerel test sunucusu).
 - **Önizleme güvenliği:** Markdown’dan üretilen HTML mutlaka sanitize edilmeli (ör. DOMPurify). Ham kullanıcı içeriği güvenilmüş sayılmaz.
 - **Bağımlılıklar:** Mümkünse CDN sürümleri sabitlenir; üretimde SRI (`integrity`) tercih edilir.
 - **Hosting:** Azure Static Web Apps kullanılıyorsa `staticwebapp.config.json` güvenlik başlıkları (CSP dahil) uygulamanın gerçek kaynak listesiyle uyumlu kalmalıdır.

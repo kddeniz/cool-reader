@@ -6,6 +6,7 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 
 - **Yalnızca tarayıcı (browser-only):** HTML, CSS ve JavaScript. Uygulama mantığının tamamı istemcidedir.
 - **Backend yok:** API sunucusu, veritabanı, sunucu tarafı işleme veya ayrı bir backend kod tabanı yoktur; özellik eklerken bu kısıt korunmalıdır.
+- **İstisna (yalnız geliştirme):** `scripts/playwright-serve.mjs`, Playwright testleri için `Accept: text/markdown` ile HTML → markdown anlaşması yapar. Canlı sitede saf Azure SWA `Accept`’e göre içerik seçemez; uzaktan “markdown negotiation” taraması için CDN/kenar katmanında dönüşüm gerekir (ör. Cloudflare [Markdown for Agents](https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/)).
 
 ## Dosya haritası
 
@@ -17,6 +18,8 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 | `schema-ld.json` | JSON-LD (CSP ile uyum için harici dosya; `softwareVersion` burada) |
 | `staticwebapp.config.json` | Azure Static Web Apps: CSP ve diğer güvenlik başlıkları |
 | `package.json` | Yalnızca geliştirme: ESLint, html-validate, Playwright |
+| `scripts/playwright-serve.mjs` | Playwright için yerel sunucu; `staticwebapp.config.json` başlıkları + `.html` için `Accept: text/markdown` anlaşması |
+| `scripts/markdown-negotiation.mjs` | `Accept` q-değerleri, Turndown ile gövde → markdown, `x-markdown-tokens` tahmini |
 | `.github/workflows/ci.yml` | PR/push kalite kapıları |
 | `LICENSE` | MIT lisans metni |
 | `SECURITY.md` | Güvenlik açığı bildirimi |
