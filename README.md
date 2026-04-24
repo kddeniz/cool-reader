@@ -12,9 +12,11 @@
 
 ### Overview
 
-**Cool Reader** is a fast, browser-based markdown editor and preview tool. Write markdown on the left panel and see a live HTML preview on the right panel in real-time. No backend, no complexity—just pure client-side markdown editing.
+**Cool Reader** is a free, browser-only markdown editor: you type Markdown on the left and see a live, DOMPurify-sanitized HTML preview on the right. There is no server, no build step, and no account.
 
-🚀 **[Try the Live Demo](https://cool-reader.com/)**
+🚀 **[Live demo](https://cool-reader.com/)** · **📦 [Source on GitHub](https://github.com/kddeniz/cool-reader)**
+
+**Quick facts (for humans and AI summaries):** MIT License · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via CDN · Preview updates debounced at 120ms.
 
 ### Key Features
 
@@ -66,6 +68,12 @@ Markdown-generated HTML is sanitized with **DOMPurify** before being inserted in
 
 Both are loaded from CDN. For offline use, download these libraries locally and update the script paths in `index.html`.
 
+### Common questions
+
+**Does Cool Reader send my Markdown to a server?** No. Parsing and sanitization run entirely in your browser; this repository does not include a telemetry or upload pipeline.
+
+**Can I use it offline?** After the first load you still need the bundled or CDN scripts; for fully offline use, vendor `marked` and `DOMPurify` locally and point `index.html` to those files.
+
 ### How to Run
 
 1. **Quick Start:** Open `index.html` directly in your browser (file protocol)
@@ -106,9 +114,11 @@ MIT License - Feel free to use this project for personal or commercial purposes.
 
 ### Genel Bakış
 
-**Cool Reader**, hızlı ve tarayıcı tabanlı bir markdown editörü ve önizleyici aracıdır. Sol panelde markdown yazın, sağ panelde canlı HTML önizlemesini gerçek zamanda görün. Backend yok, karmaşıklık yok—tamamen istemci tarafı markdown düzenlemesi.
+**Cool Reader**, ücretsiz ve yalnızca tarayıcıda çalışan bir markdown editörüdür: solda Markdown yazarsınız, sağda DOMPurify ile temizlenmiş canlı HTML önizlemesini görürsünüz. Sunucu, derleme adımı veya hesap yoktur.
 
-🚀 **[Canlı Demo'yu Deneyin](https://cool-reader.com/)**
+🚀 **[Canlı demo](https://cool-reader.com/)** · **📦 [Kaynak kodu (GitHub)](https://github.com/kddeniz/cool-reader)**
+
+**Hızlı bilgiler:** MIT Lisansı · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2 (ayrıştırma) ve [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (temizleme), CDN üzerinden · Önizleme güncellemeleri 120ms debounce ile.
 
 ### Temel Özellikler
 
@@ -160,6 +170,12 @@ Markdown tarafından üretilen HTML, `innerHTML` aracılığıyla DOM'a eklenmed
 
 Her ikisi de CDN'den yüklenir. Çevrimdışı kullanım için bu kütüphaneleri yerel olarak indirin ve `index.html` içinde betik yollarını güncelleyin.
 
+### Sık sorulanlar
+
+**Markdown'ım bir sunucuya gönderiliyor mu?** Hayır. Ayrıştırma ve temizleme tamamen tarayıcıda çalışır; bu depoda telemetri veya yükleme hattı yoktur.
+
+**Çevrimdışı kullanabilir miyim?** İlk yüklemeden sonra da betiklere ihtiyaç vardır; tam çevrimdışı için `marked` ve `DOMPurify` dosyalarını yerel olarak ekleyip `index.html` içindeki yolları onlara yönlendirin.
+
 ### Nasıl Çalıştırılır
 
 1. **Hızlı Başlangıç:** `index.html` dosyasını doğrudan tarayıcıda açın (file protokolü)
@@ -188,7 +204,7 @@ Aşağıdaki yollarla katkıda bulunabilirsiniz:
 - Özellik önerileri sunun
 - Pull request'ler gönderin
 
-Katkıda bulunurken, lütfen [.cursor/rules/cool-reader.mdc](.cursor/rules/cool-reader.mdc) içindeki yönergeleri izleyin ve proje yapısı veya mimariyiz değişiklikleri [claude.md](claude.md) içinde güncelleyin.
+Katkıda bulunurken, lütfen [.cursor/rules/cool-reader.mdc](.cursor/rules/cool-reader.mdc) içindeki yönergeleri izleyin ve proje yapısı veya mimarisindeki değişiklikleri [claude.md](claude.md) içinde güncelleyin.
 
 ### Lisans
 
