@@ -8,7 +8,24 @@ test.describe("Cool Reader", () => {
     expect(res.headers()["content-type"]).toMatch(/text\/plain/i);
     const body = await res.text();
     expect(body).toMatch(/User-agent:\s*\*/i);
+    expect(body).toMatch(
+      /Content-Signal:\s*ai-train=no,\s*search=yes,\s*ai-input=no/i,
+    );
     expect(body).toMatch(/Allow:\s*\//);
+    const aiUserAgents = [
+      "GPTBot",
+      "OAI-SearchBot",
+      "Claude-Web",
+      "Google-Extended",
+      "Amazonbot",
+      "anthropic-ai",
+      "Bytespider",
+      "CCBot",
+      "Applebot-Extended",
+    ];
+    for (const ua of aiUserAgents) {
+      expect(body).toContain(`User-agent: ${ua}`);
+    }
     expect(body).toMatch(/Sitemap:\s*https:\/\/cool-reader\.com\/sitemap\.xml/i);
   });
 
