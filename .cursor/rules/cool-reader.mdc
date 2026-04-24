@@ -1,10 +1,10 @@
 ---
-description: Kool Reader — statik markdown editör kuralları
+description: Cool Reader — statik markdown editör kuralları
 globs: "**/*.{html,css,js,md}"
 alwaysApply: true
 ---
 
-# Kool Reader
+# Cool Reader
 
 - **Yalnızca istemci:** Statik HTML, CSS ve JavaScript. Sunucu tarafı kod, backend API veya veritabanı eklenmez.
 - **Önizleme güvenliği:** Markdown’dan üretilen HTML mutlaka sanitize edilmeli (ör. DOMPurify). Ham kullanıcı içeriği güvenilmüş sayılmaz.

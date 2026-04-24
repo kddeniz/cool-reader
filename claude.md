@@ -1,4 +1,4 @@
-# Kool Reader
+# Cool Reader
 
 Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol panelde ham metin, sağ panelde güvenli HTML önizlemesi.
 
@@ -32,4 +32,4 @@ Markdown’dan üretilen HTML, `innerHTML` ile basılmadan önce **DOMPurify** i
 
 ## Sürdürülebilirlik ve dokümantasyon
 
-**Yapılacak tüm planlamalar ve geliştirmelerde `claude.md` dosyasının güncellenmesi de düşünülmeli** (proje yapısı, yeni akışlar, güvenlik veya kısıt değişiklikleri). Anlamlı özellik eklerken [.cursor/rules/kool-reader.mdc](.cursor/rules/kool-reader.mdc) ile uyumlu tutun.
+**Yapılacak tüm planlamalar ve geliştirmelerde `claude.md` dosyasının güncellenmesi de düşünülmeli** (proje yapısı, yeni akışlar, güvenlik veya kısıt değişiklikleri). Anlamlı özellik eklerken [.cursor/rules/cool-reader.mdc](.cursor/rules/cool-reader.mdc) ile uyumlu tutun.
