@@ -71,6 +71,13 @@ test.describe("Cool Reader", () => {
     expect(res.headers()["content-type"]).toMatch(/text\/html/i);
   });
 
+  test("shows toolbar tagline with product value prop", async ({ page }) => {
+    await page.goto("/");
+    const tagline = page.locator("#toolbarTagline");
+    await expect(tagline).toBeVisible();
+    await expect(tagline).toContainText("Browser-only Markdown with live, sanitized HTML preview");
+  });
+
   test("renders markdown preview", async ({ page }) => {
     await page.goto("/");
     await page.locator("#editor").fill("# Hello\n**Bold**");
