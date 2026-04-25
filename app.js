@@ -32,7 +32,7 @@
     if (typeof marked === "undefined" || typeof DOMPurify === "undefined") {
       preview.innerHTML = "";
       setAppAlert(
-        "Önizleme için marked ve DOMPurify yüklenemedi. Ağ bağlantısını kontrol edin veya sayfayı yenileyin."
+        "Could not load marked and DOMPurify for preview. Check your network connection or refresh the page."
       );
       return;
     }
@@ -80,7 +80,7 @@
       callback(null, String(reader.result || ""));
     };
     reader.onerror = function () {
-      callback(reader.error || new Error("Okuma hatası"));
+      callback(reader.error || new Error("Read error"));
     };
     reader.readAsText(file);
   }
@@ -88,7 +88,7 @@
   function applyFileContent(file) {
     readFileAsText(file, function (err, text) {
       if (err) {
-        setAppAlert("Dosya okunamadı: " + String(err.message || err));
+        setAppAlert("Could not read file: " + String(err.message || err));
         return;
       }
       setAppAlert("");

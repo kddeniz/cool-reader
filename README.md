@@ -34,9 +34,9 @@
 1. **Open the App:** Open `index.html` in your web browser (or serve via any static file server)
 2. **Write Markdown:** Type or paste markdown in the left panel
 3. **See Preview:** View rendered HTML in the right panel in real-time
-4. **Load Files:** Click "Dosya aç" (Open File) button to load `.md` or text files
+4. **Load Files:** Click the "Open file" button to load `.md` or text files
 5. **Drag & Drop:** Drag markdown files onto the left panel to load them
-6. **Download:** Click "İndir (.md)" button to download your markdown as a file
+6. **Download:** Click the "Download (.md)" button to download your markdown as a file
 7. **Toggle Panel:** Use the ☰ button to expand/collapse the editor panel for reading mode
 
 ### Project Structure

@@ -2,6 +2,11 @@
 
 Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol panelde ham metin, sağ panelde güvenli HTML önizlemesi.
 
+## Kullanıcı arayüzü dili
+
+- **`index.html` ve `app.js`:** Kullanıcıya dönük tüm metinler (butonlar, `aria-label`, `title`, `placeholder`, `#appAlert` mesajları) **İngilizce** tutulur; belge dili `html lang="en"`.
+- **`README.md`:** GitHub için çok dilli (İngilizce + Türkçe) bölümler korunabilir; canlı uygulama kopyası İngilizcedir.
+
 ## Mimari kısıt
 
 - **Yalnızca tarayıcı (browser-only):** HTML, CSS ve JavaScript. Uygulama mantığının tamamı istemcidedir.

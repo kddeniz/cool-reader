@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,8 +17,7 @@
       property="og:description"
       content="Write markdown in the browser, see safe live HTML preview. marked + DOMPurify, no backend."
     />
-    <meta property="og:locale" content="tr_TR" />
-    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Cool Reader | Markdown editor with live preview" />
     <meta
@@ -54,8 +53,8 @@
             id="toggleEditor"
             aria-controls="editorPane"
             aria-expanded="true"
-            aria-label="Sol paneli aç veya kapat"
-            title="Sol paneli aç/kapat"
+            aria-label="Show or hide editor panel"
+            title="Toggle editor panel"
           >
             <span class="toolbar__toggle-icon" aria-hidden="true">☰</span>
           </button>
@@ -63,16 +62,16 @@
         </div>
         <div class="toolbar__actions">
           <label class="toolbar__file">
-            <span class="visually-hidden">Markdown dosyası aç</span>
+            <span class="visually-hidden">Open markdown file</span>
             <input
               type="file"
               id="fileInput"
               accept=".md,.markdown,.txt,text/markdown,text/plain"
             />
-            <span class="toolbar__file-label">Dosya aç</span>
+            <span class="toolbar__file-label">Open file</span>
           </label>
-          <button type="button" class="toolbar__download" id="downloadBtn" title="Geçerli metni .md olarak indir">
-            İndir (.md)
+          <button type="button" class="toolbar__download" id="downloadBtn" title="Download current text as .md">
+            Download (.md)
           </button>
         </div>
       </header>
@@ -84,12 +83,12 @@
               id="editor"
               class="editor"
               spellcheck="false"
-              aria-label="Markdown düzenleyici"
-              placeholder="Markdown yazın veya dosya sürükleyin…"
+              aria-label="Markdown editor"
+              placeholder="Write markdown or drop a file here…"
             ></textarea>
           </div>
         </section>
-        <section class="pane pane--preview" id="previewPane" aria-label="Önizleme">
+        <section class="pane pane--preview" id="previewPane" aria-label="Preview">
           <div class="pane__inner pane__inner--preview" id="preview"></div>
         </section>
       </main>

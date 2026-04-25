@@ -73,9 +73,9 @@ test.describe("Cool Reader", () => {
 
   test("renders markdown preview", async ({ page }) => {
     await page.goto("/");
-    await page.locator("#editor").fill("# Merhaba\n**Kalın**");
-    await expect(page.locator("#preview")).toContainText("Merhaba");
-    await expect(page.locator("#preview strong")).toHaveText("Kalın");
+    await page.locator("#editor").fill("# Hello\n**Bold**");
+    await expect(page.locator("#preview")).toContainText("Hello");
+    await expect(page.locator("#preview strong")).toHaveText("Bold");
   });
 
   test("does not execute script tags from markdown", async ({ page }) => {
