@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **CSP:** `staticwebapp.config.json` now allows Google Analytics / Tag Manager (`script-src`, `connect-src`) and a SHA-256 hash for the inline gtag bootstrap so production headers match `index.html` and `docs/api.html`.
+- **Docs:** README and product copy no longer imply “no telemetry”; they describe GA as a third party on the hosted site while clarifying markdown is not uploaded to Cool Reader–hosted backends.
+
 ### Added
 
 - Toolbar **Download (.html)**: exports the current markdown as a standalone HTML document (same sanitized body as the live preview, with embedded prose styles and optional Google Fonts link in the export).

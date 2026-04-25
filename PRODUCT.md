@@ -12,6 +12,8 @@ People who write or edit Markdown and want an immediate, trustworthy preview wit
 
 Cool Reader is a free, client-only Markdown editor: you type on the left, see a live HTML preview on the right. Preview output is sanitized with DOMPurify. You can open or drop `.md` / text files, download the current text as `.md`, or download the preview as a standalone `.html` file. There is no server, no database, and no account. Success means low friction (open and write), clear trust (safe rendering), and content staying in the foreground (minimal chrome).
 
+The hosted site may load **Google Analytics** (gtag) for aggregated traffic; there is still no Cool Reader–hosted backend and the app does not upload your markdown to project-owned servers.
+
 **UI tagline (toolbar):** Browser-only Markdown with live, sanitized HTML preview. Open or export .md and .html. No account.
 
 ## Brand Personality

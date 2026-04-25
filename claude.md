@@ -17,7 +17,7 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 
 | Dosya | Açıklama |
 |--------|-----------|
-| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel, jsDelivr üzerinden sabit sürüm + SRI ile `marked` ve `DOMPurify` |
+| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel, Google Analytics (gtag.js + küçük inline init), jsDelivr üzerinden sabit sürüm + SRI ile `marked` ve `DOMPurify` |
 | `styles.css` | Düzen (yaklaşık 50/50 paneller), sol panel daraltılmış tam genişlik okuma modu, önizleme tipografisi, editör `:focus-visible` halkası |
 | `theme.js` | Okuma teması (sürümlü JSON, `localStorage`), canlı önizleme ve `.html` dışa aktarmada paylaşılan `--cr-*` değişkenleri ve dışa aktarma `<style>` üreticisi |
 | `app.js` | Debounce ile önizleme, okuma teması (Aa) ve `localStorage`, dosya açma, sürükle-bırak, `.md` / bağımsız `.html` dışa aktarma, sistem yazdırma ile aynı HTML, sol panel aç/kapa, `#appAlert` |
@@ -46,13 +46,13 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 Markdown’dan üretilen HTML, `innerHTML` ile basılmadan önce **DOMPurify** ile sanitize edilir. Yeni özelliklerde ham HTML enjeksiyonu riskine dikkat edin.
 
 - Üçüncü taraf betiklerde **SRI** (`integrity`) kullanılır; sürüm yükseltirken hash’leri yeniden üretin.
-- Üretimde Azure SWA kullanılıyorsa `staticwebapp.config.json` içindeki **CSP** ve başlıklar, uygulamanın izin verdiği kaynaklarla uyumlu tutulmalıdır.
+- Üretimde Azure SWA kullanılıyorsa `staticwebapp.config.json` içindeki **CSP** ve başlıklar, uygulamanın izin verdiği kaynaklarla uyumlu tutulmalıdır (`cdn.jsdelivr.net`, `googletagmanager.com`, Google Analytics `connect-src` uçları, inline gtag init için `sha256-…`).
 - Güvenlik açığı bildirimi: `SECURITY.md`.
 
 ## Nasıl çalıştırılır
 
 - `index.html` dosyasını tarayıcıda açın (`file://`) veya klasörü herhangi bir statik dosya sunucusu ile servis edin.
-- Önizleme için jsDelivr üzerinden `marked` ve `DOMPurify` yüklenir (SRI ile); çevrimdışı kullanım için bu bağımlılıkların yerel kopyalanması ve `index.html` + SRI güncellenmesi gerekir. Google Fonts ayrıca `fonts.googleapis.com` / `fonts.gstatic.com` çağırır.
+- Önizleme için jsDelivr üzerinden `marked` ve `DOMPurify` yüklenir (SRI ile); çevrimdışı kullanım için bu bağımlılıkların yerel kopyalanması ve `index.html` + SRI güncellenmesi gerekir. Google Fonts ayrıca `fonts.googleapis.com` / `fonts.gstatic.com` çağırır. Barındırılan sitede Google Analytics (gtag) da yüklenir; CSP buna göre güncellenir.
 
 ## Sürdürülebilirlik ve dokümantasyon
 

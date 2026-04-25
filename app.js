@@ -20,8 +20,15 @@
   var themeDetails = document.getElementById("themeDetails");
   var dropZone = document.getElementById("dropZone");
   var appAlert = document.getElementById("appAlert");
+  var syncScrollToggle = document.getElementById("syncScrollToggle");
   var renderTimer = null;
   var currentTheme = null;
+
+  var SYNC_SCROLL_KEY = "coolReaderSyncScroll";
+  var syncScrollEnabled = true;
+  var isApplyingSyncScroll = false;
+  var editorSyncRaf = null;
+  var previewSyncRaf = null;
 
   function getThemeApi() {
     if (!TR) return null;
@@ -41,6 +48,95 @@
 
   function getMarkdownText() {
     return editor.value;
+  }
+
+  function loadSyncScrollPref() {
+    try {
+      if (typeof window.localStorage === "undefined") return true;
+      var v = window.localStorage.getItem(SYNC_SCROLL_KEY);
+      if (v === null) return true;
+      return v !== "0" && v !== "false";
+    } catch {
+      return true;
+    }
+  }
+
+  function saveSyncScrollPref() {
+    try {
+      if (typeof window.localStorage !== "undefined") {
+        window.localStorage.setItem(SYNC_SCROLL_KEY, syncScrollEnabled ? "1" : "0");
+      }
+    } catch {
+      /* no-op */
+    }
+  }
+
+  function updateSyncScrollToggleUi() {
+    if (!syncScrollToggle) return;
+    syncScrollToggle.setAttribute("aria-pressed", syncScrollEnabled ? "true" : "false");
+  }
+
+  function isEditorSplitVisible() {
+    return app && !app.classList.contains("app--editor-collapsed");
+  }
+
+  function isSyncScrollActive() {
+    return syncScrollEnabled && isEditorSplitVisible();
+  }
+
+  function getScrollMax(el) {
+    return Math.max(0, el.scrollHeight - el.clientHeight);
+  }
+
+  function getScrollRatio(el) {
+    var max = getScrollMax(el);
+    if (max <= 0) return 0;
+    var r = el.scrollTop / max;
+    if (r < 0) return 0;
+    if (r > 1) return 1;
+    return r;
+  }
+
+  function setScrollFromRatio(el, ratio) {
+    var max = getScrollMax(el);
+    var r = ratio;
+    if (r < 0) r = 0;
+    if (r > 1) r = 1;
+    el.scrollTop = r * max;
+  }
+
+  function applyEditorScrollToPreview() {
+    if (!isSyncScrollActive()) return;
+    if (isApplyingSyncScroll) return;
+    isApplyingSyncScroll = true;
+    setScrollFromRatio(preview, getScrollRatio(editor));
+    isApplyingSyncScroll = false;
+  }
+
+  function applyPreviewScrollToEditor() {
+    if (!isSyncScrollActive()) return;
+    if (isApplyingSyncScroll) return;
+    isApplyingSyncScroll = true;
+    setScrollFromRatio(editor, getScrollRatio(preview));
+    isApplyingSyncScroll = false;
+  }
+
+  function onEditorScrollForSync() {
+    if (!isSyncScrollActive() || isApplyingSyncScroll) return;
+    if (editorSyncRaf !== null) return;
+    editorSyncRaf = window.requestAnimationFrame(function () {
+      editorSyncRaf = null;
+      applyEditorScrollToPreview();
+    });
+  }
+
+  function onPreviewScrollForSync() {
+    if (!isSyncScrollActive() || isApplyingSyncScroll) return;
+    if (previewSyncRaf !== null) return;
+    previewSyncRaf = window.requestAnimationFrame(function () {
+      previewSyncRaf = null;
+      applyPreviewScrollToEditor();
+    });
   }
 
   function markdownToSanitizedHtml(markdown) {
@@ -317,7 +413,19 @@
       return;
     }
     setAppAlert("");
+    var ratio = null;
+    if (isSyncScrollActive()) {
+      ratio = getScrollRatio(editor);
+    }
     preview.innerHTML = safe;
+    if (ratio !== null) {
+      window.requestAnimationFrame(function () {
+        if (!isSyncScrollActive()) return;
+        isApplyingSyncScroll = true;
+        setScrollFromRatio(preview, ratio);
+        isApplyingSyncScroll = false;
+      });
+    }
   }
 
   function scheduleRender() {
@@ -373,6 +481,23 @@
       editor.value = text;
       renderNow();
       editor.focus();
+    });
+  }
+
+  syncScrollEnabled = loadSyncScrollPref();
+  updateSyncScrollToggleUi();
+
+  editor.addEventListener("scroll", onEditorScrollForSync, { passive: true });
+  preview.addEventListener("scroll", onPreviewScrollForSync, { passive: true });
+
+  if (syncScrollToggle) {
+    syncScrollToggle.addEventListener("click", function () {
+      syncScrollEnabled = !syncScrollEnabled;
+      updateSyncScrollToggleUi();
+      saveSyncScrollPref();
+      if (syncScrollEnabled && isEditorSplitVisible()) {
+        window.requestAnimationFrame(applyEditorScrollToPreview);
+      }
     });
   }
 
@@ -446,7 +571,12 @@
   function setEditorCollapsed(collapsed) {
     app.classList.toggle("app--editor-collapsed", collapsed);
     toggleBtn.setAttribute("aria-expanded", collapsed ? "false" : "true");
-    if (!collapsed) editor.focus();
+    if (!collapsed) {
+      editor.focus();
+      if (syncScrollEnabled) {
+        window.requestAnimationFrame(applyEditorScrollToPreview);
+      }
+    }
   }
 
   toggleBtn.addEventListener("click", function () {

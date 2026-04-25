@@ -152,9 +152,106 @@
     };
   }
 
+  /** Keys from {@link DEFAULT_THEME.colors} — only these may flow into export `<style>`. */
+  var COLOR_KEYS = [
+    "text",
+    "bg",
+    "link",
+    "linkHover",
+    "muted",
+    "border",
+    "codeBg",
+    "quoteBg",
+    "tableHeaderBg",
+    "thText",
+    "preInset",
+  ];
+
+  /**
+   * Reject values that could break out of a CSS custom property or inject HTML via `</style>`.
+   * @param {unknown} value
+   * @param {string} fallback
+   * @returns {string}
+   */
+  function sanitizeThemeColorValue(value, fallback) {
+    if (typeof value !== "string") return fallback;
+    var s = value.trim();
+    if (s.length === 0 || s.length > 220) return fallback;
+    if (/[<>'"`{};]|\\|url\s*\(|expression\s*\(|@import|javascript\s*:/i.test(s)) return fallback;
+    return s;
+  }
+
+  /**
+   * @param {object} colors
+   * @param {object} defaults
+   * @returns {object}
+   */
+  function sanitizeThemeColors(colors, defaults) {
+    var out = Object.assign({}, defaults);
+    if (!colors || typeof colors !== "object") return out;
+    var i;
+    for (i = 0; i < COLOR_KEYS.length; i++) {
+      var k = COLOR_KEYS[i];
+      if (Object.prototype.hasOwnProperty.call(colors, k)) {
+        out[k] = sanitizeThemeColorValue(colors[k], defaults[k]);
+      }
+    }
+    return out;
+  }
+
+  /**
+   * @param {number} n
+   * @param {number} min
+   * @param {number} max
+   * @param {number} fallback
+   * @returns {number}
+   */
+  function clampFinite(n, min, max, fallback) {
+    var x = Number(n);
+    if (!Number.isFinite(x)) return fallback;
+    return Math.min(max, Math.max(min, x));
+  }
+
+  /**
+   * @param {object} layout
+   * @param {object} defaults
+   * @returns {object}
+   */
+  function sanitizeThemeLayout(layout, defaults) {
+    var L = Object.assign({}, defaults, layout || {});
+    L.bodyFontRem = clampFinite(L.bodyFontRem, 0.75, 1.45, defaults.bodyFontRem);
+    L.lineHeight = clampFinite(L.lineHeight, 1.25, 2.05, defaults.lineHeight);
+    L.maxWidthCh = Math.round(clampFinite(L.maxWidthCh, 48, 88, defaults.maxWidthCh));
+    L.h1Rem = clampFinite(L.h1Rem, 1.4, 2.6, defaults.h1Rem);
+    L.h2Rem = clampFinite(L.h2Rem, 1.05, 1.9, defaults.h2Rem);
+    L.h3Rem = clampFinite(L.h3Rem, 0.95, 1.65, defaults.h3Rem);
+    L.h4Rem = clampFinite(L.h4Rem, 0.85, 1.35, defaults.h4Rem);
+    return L;
+  }
+
+  /**
+   * @param {object} fonts
+   * @param {object} defaults
+   * @returns {object}
+   */
+  function sanitizeThemeFonts(fonts, defaults) {
+    var out = Object.assign({}, defaults);
+    if (!fonts || typeof fonts !== "object") return out;
+    if (typeof fonts.prose === "string" && Object.prototype.hasOwnProperty.call(FONT_CHOICES, fonts.prose)) {
+      out.prose = fonts.prose;
+    }
+    if (typeof fonts.code === "string" && Object.prototype.hasOwnProperty.call(FONT_CHOICES, fonts.code)) {
+      out.code = fonts.code;
+    }
+    return out;
+  }
+
   function normTheme(raw) {
     var t = simpleMerge(DEFAULT_THEME, !raw || typeof raw !== "object" ? {} : raw);
     t.schemaVersion = 1;
+    t.colors = sanitizeThemeColors(t.colors, DEFAULT_THEME.colors);
+    t.fonts = sanitizeThemeFonts(t.fonts, DEFAULT_THEME.fonts);
+    t.layout = sanitizeThemeLayout(t.layout, DEFAULT_THEME.layout);
     return t;
   }
 

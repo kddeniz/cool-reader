@@ -16,7 +16,7 @@
 
 🚀 **[Live demo](https://cool-reader.com/)** · **📦 [Source on GitHub](https://github.com/kddeniz/cool-reader)**
 
-**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via jsDelivr with **SRI** · Google Fonts for typography · Preview updates debounced at 120ms · Export `.md` or standalone `.html` (embedded reading theme) · **Reading theme** (presets, body font, size, line height) in `localStorage` · **Print / PDF** next to downloads, same HTML as export, system dialog for Save as PDF · CI: HTML validate + ESLint + Playwright on PRs to `main`.
+**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via jsDelivr with **SRI** · Google Fonts for typography · [Google Analytics](https://developers.google.com/analytics) (gtag) on the hosted site · Preview updates debounced at 120ms · Export `.md` or standalone `.html` (embedded reading theme) · **Reading theme** (presets, body font, size, line height) in `localStorage` · **Print / PDF** next to downloads, same HTML as export, system dialog for Save as PDF · CI: HTML validate + ESLint + Playwright on PRs to `main`.
 
 ### Key Features
 
@@ -47,7 +47,7 @@
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Page skeleton, toolbar, two-panel layout, CDN dependencies for `marked` and `DOMPurify` (pinned + SRI) |
+| `index.html` | Page skeleton, toolbar, two-panel layout, Google Analytics (gtag), CDN dependencies for `marked` and `DOMPurify` (pinned + SRI) |
 | `styles.css` | Responsive layout (~50/50 panels), reading mode for left panel, preview typography (`--cr-*` reading tokens) |
 | `theme.js` | Versioned `ReadingTheme` data, defaults, browser `localStorage`, and shared CSS for the preview, `.html` export, and print view |
 | `app.js` | Preview rendering with debounce, file handling, drag-and-drop, Markdown and HTML export, print, reading theme UI, panel toggle |
@@ -85,9 +85,11 @@ For offline use, vendor `marked` and `DOMPurify` locally, update `index.html` sc
 
 ### Common questions
 
-**Does Cool Reader send my Markdown to a server?** No. Parsing and sanitization run entirely in your browser; this repository does not include a telemetry or upload pipeline.
+**Does Cool Reader send my Markdown to a server?** No. Parsing and sanitization run entirely in your browser; the app does not upload your markdown to a Cool Reader–hosted backend.
 
-**Does opening the app contact third parties?** Yes, for fonts (Google Fonts) and for the pinned parser/sanitizer scripts (jsDelivr). Your markdown content itself is not uploaded by this app.
+**Does opening the app contact third parties?** Yes: pinned `marked` / DOMPurify from jsDelivr, Google Fonts, and (on the hosted site) Google Analytics via Google Tag Manager. Analytics collects aggregated usage as configured in GA; your markdown text is not sent to Cool Reader servers.
+
+**Does the hosted site use analytics?** Yes. `index.html` and `docs/api.html` load Google Analytics (gtag). `staticwebapp.config.json` CSP allows those endpoints alongside jsDelivr and Fonts.
 
 **Can I use it offline?** After the first load you still need the bundled or CDN scripts; for fully offline use, vendor `marked` and `DOMPurify` locally and point `index.html` to those files.
 
@@ -145,7 +147,7 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 
 🚀 **[Canlı demo](https://cool-reader.com/)** · **📦 [Kaynak kodu (GitHub)](https://github.com/kddeniz/cool-reader)**
 
-**Hızlı bilgiler:** MIT Lisansı ([`LICENSE`](LICENSE)) · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2 ve [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6, jsDelivr üzerinden **SRI** ile · Tipografi için Google Fonts · Önizleme 120ms debounce · Okuma teması (ön ayar + kaydırıcılar) tarayıcı `localStorage`’da · `.md` / bağımsız `.html` dışa aktarma (gömülü tema) · Yazdır / PDF kaydet, indirilen HTML ile aynı boru · CI: `main` PR’larında HTML doğrulama + ESLint + Playwright.
+**Hızlı bilgiler:** MIT Lisansı ([`LICENSE`](LICENSE)) · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2 ve [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6, jsDelivr üzerinden **SRI** ile · Tipografi için Google Fonts · Barındırılan sitede [Google Analytics](https://developers.google.com/analytics) (gtag) · Önizleme 120ms debounce · Okuma teması (ön ayar + kaydırıcılar) tarayıcı `localStorage`’da · `.md` / bağımsız `.html` dışa aktarma (gömülü tema) · Yazdır / PDF kaydet, indirilen HTML ile aynı boru · CI: `main` PR’larında HTML doğrulama + ESLint + Playwright.
 
 ### Temel Özellikler
 
@@ -176,7 +178,7 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 
 | Dosya | Amacı |
 |-------|-------|
-| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel düzeni, `marked` ve `DOMPurify` için sabitlenmiş CDN + SRI |
+| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel düzeni, Google Analytics (gtag), `marked` ve `DOMPurify` için sabitlenmiş CDN + SRI |
 | `styles.css` | Duyarlı düzen (~%50-%50 paneller), sol panel için okuma modu, önizleme tipografisi (`--cr-*` okuma değişkenleri) |
 | `theme.js` | Sürümlü okuma teması, varsayılanlar, `localStorage`, önizleme / `.html` / yazdır için paylaşılan stil |
 | `app.js` | Debounce ile önizleme, dosya, sürükle-bırak, Markdown ve HTML dışa aktarma, yazdır, okuma teması arayüzü, panel aç/kapat |
@@ -214,9 +216,11 @@ Markdown tarafından üretilen HTML, `innerHTML` aracılığıyla DOM'a eklenmed
 
 ### Sık sorulanlar
 
-**Markdown'ım bir sunucuya gönderiliyor mu?** Hayır. Ayrıştırma ve temizleme tamamen tarayıcıda çalışır; bu depoda telemetri veya yükleme hattı yoktur.
+**Markdown'ım bir sunucuya gönderiliyor mu?** Hayır. Ayrıştırma ve temizleme tamamen tarayıcıda çalışır; Cool Reader’a ait bir sunucuya markdown yüklenmez.
 
-**Uygulama üçüncü taraflara bağlanıyor mu?** Evet: fontlar (Google Fonts) ve sabitlenmiş betikler (jsDelivr). Markdown içeriğiniz bu uygulama tarafından yüklenmez.
+**Uygulama üçüncü taraflara bağlanıyor mu?** Evet: jsDelivr üzerinden sabitlenmiş `marked` / DOMPurify, Google Fonts ve (barındırılan sitede) Google Tag Manager üzerinden Google Analytics. GA toplu kullanım verisi toplar; markdown metniniz Cool Reader sunucularına gönderilmez.
+
+**Barındırılan sitede analitik var mı?** Evet. `index.html` ve `docs/api.html` Google Analytics (gtag) yükler. `staticwebapp.config.json` CSP’si bunları jsDelivr ve Fonts ile birlikte açıkça listeler.
 
 **Çevrimdışi kullanabilir miyim?** İlk yüklemeden sonra da betiklere ihtiyaç vardır; tam çevrimdışı için `marked` ve `DOMPurify` dosyalarını yerel olarak ekleyip `index.html` içindeki yolları onlara yönlendirin.
 
