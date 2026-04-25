@@ -78,6 +78,13 @@ test.describe("Cool Reader", () => {
     await expect(tagline).toContainText("Browser-only Markdown with live, sanitized HTML preview");
   });
 
+  test("footer links to GitHub repository", async ({ page }) => {
+    await page.goto("/");
+    const source = page.locator('footer.app-footer a[href="https://github.com/kddeniz/cool-reader"]');
+    await expect(source).toBeVisible();
+    await expect(source).toHaveText("Source on GitHub");
+  });
+
   test("renders markdown preview", async ({ page }) => {
     await page.goto("/");
     await page.locator("#editor").fill("# Hello\n**Bold**");

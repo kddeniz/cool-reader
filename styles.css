@@ -239,6 +239,34 @@ body {
   min-height: 0;
 }
 
+.app-footer {
+  flex-shrink: 0;
+  padding: 0.45rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.app-footer__link {
+  color: inherit;
+  text-decoration: none;
+  text-underline-offset: 0.15em;
+  transition: color 0.18s var(--ease-out);
+}
+
+.app-footer__link:hover {
+  color: var(--accent);
+}
+
+.app-footer__link:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
 .pane {
   flex: 1 1 50%;
   min-width: 0;
