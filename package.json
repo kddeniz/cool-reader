@@ -4,7 +4,7 @@
   "description": "Dev tooling only — the app ships as static HTML/CSS/JS (no runtime npm dependency).",
   "scripts": {
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
-    "lint": "eslint app.js scripts",
+    "lint": "eslint app.js theme.js scripts",
     "validate:html": "html-validate index.html docs/api.html",
     "test": "playwright test",
     "test:headed": "playwright test --headed"

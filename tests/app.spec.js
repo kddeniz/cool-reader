@@ -111,6 +111,8 @@ test.describe("Cool Reader", () => {
     const text = Buffer.concat(chunks).toString("utf8");
     expect(text).toMatch(/<!DOCTYPE html>/i);
     expect(text).toContain('<main class="cr-export">');
+    expect(text).toMatch(/:root\{/);
+    expect(text).toMatch(/--cr-prose-text/);
     expect(text).toMatch(/<h1[^>]*>Exported<\/h1>/);
     expect(text).toMatch(/<strong>Bold<\/strong>/);
     expect(text).not.toContain("<script>");

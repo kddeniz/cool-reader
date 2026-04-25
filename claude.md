@@ -19,7 +19,8 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 |--------|-----------|
 | `index.html` | Sayfa iskeleti, araç çubuğu, iki panel, jsDelivr üzerinden sabit sürüm + SRI ile `marked` ve `DOMPurify` |
 | `styles.css` | Düzen (yaklaşık 50/50 paneller), sol panel daraltılmış tam genişlik okuma modu, önizleme tipografisi, editör `:focus-visible` halkası |
-| `app.js` | Debounce ile önizleme, dosya açma, sol panele sürükle-bırak, `.md` ve bağımsız `.html` dışa aktarma, sol panel aç/kapa; CDN / dosya hataları için `#appAlert` |
+| `theme.js` | Okuma teması (sürümlü JSON, `localStorage`), canlı önizleme ve `.html` dışa aktarmada paylaşılan `--cr-*` değişkenleri ve dışa aktarma `<style>` üreticisi |
+| `app.js` | Debounce ile önizleme, okuma teması (Aa) ve `localStorage`, dosya açma, sürükle-bırak, `.md` / bağımsız `.html` dışa aktarma, sistem yazdırma ile aynı HTML, sol panel aç/kapa, `#appAlert` |
 | `schema-ld.json` | JSON-LD (CSP ile uyum için harici dosya; `softwareVersion` burada) |
 | `staticwebapp.config.json` | Azure Static Web Apps: CSP ve diğer güvenlik başlıkları |
 | `package.json` | Yalnızca geliştirme: ESLint, html-validate, Playwright |
@@ -37,7 +38,8 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 1. **Yazma:** Metin `textarea` içinde düzenlenir; aynı metin kaynağından önizleme üretilir.
 2. **Dosya aç:** Araç çubuğundaki dosya seçici ile `.md` / metin dosyası yüklenir; içerik editöre yazılır ve önizleme güncellenir.
 3. **Sürükle-bırak:** Dosya sol editör alanına bırakılır; çoklu dosyada öncelik `.md` uzantılı dosyadadır.
-4. **Dışa aktarma:** Araç çubuğunda ham metin `.md` olarak; önizleme ile aynı `marked` + DOMPurify çıktısı gömülü tipografi stilleriyle `.html` dosyası olarak indirilebilir.
+4. **Dışa aktarma:** Araç çubuğunda ham metin `.md` olarak; `marked` + DOMPurify çıktısı, seçili okuma temasıyla aynı gömülü stillerle bağımsız `.html` olarak. **Yazdır** düğmesi, indir düğmelerinin yanındadır; aynı HTML dizesiyle açılır, sistem yazdır penceresinde “Save as PDF” (sunucu yok).
+5. **Okuma teması:** `Aa` paneli: ön ayar, gövde metin fontu, metin boyutu, satır yüksekliği, **Reset** (`theme.js` + `#preview` üzerinde CSS değişkenleri). Tercihler `localStorage`’da; uygulama kromu varsayılan, özelleşen alan önizleme + dışa aktarma.
 
 ## Güvenlik
 

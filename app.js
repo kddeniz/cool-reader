@@ -2,6 +2,7 @@
   "use strict";
 
   var DEBOUNCE_MS = 120;
+  var TR = typeof CoolReaderTheme === "undefined" ? null : CoolReaderTheme;
 
   var app = document.getElementById("app");
   var editor = document.getElementById("editor");
@@ -10,9 +11,22 @@
   var fileInput = document.getElementById("fileInput");
   var downloadBtn = document.getElementById("downloadBtn");
   var downloadHtmlBtn = document.getElementById("downloadHtmlBtn");
+  var printThemeBtn = document.getElementById("printThemeBtn");
+  var themePreset = document.getElementById("themePreset");
+  var themeBodySize = document.getElementById("themeBodySize");
+  var themeLineHeight = document.getElementById("themeLineHeight");
+  var themeBodyFont = document.getElementById("themeBodyFont");
+  var themeReset = document.getElementById("themeReset");
+  var themeDetails = document.getElementById("themeDetails");
   var dropZone = document.getElementById("dropZone");
   var appAlert = document.getElementById("appAlert");
   var renderTimer = null;
+  var currentTheme = null;
+
+  function getThemeApi() {
+    if (!TR) return null;
+    return TR;
+  }
 
   function setAppAlert(message) {
     if (!appAlert) return;
@@ -37,62 +51,239 @@
   }
 
   function buildStandaloneExportHtml(sanitizedBodyHtml) {
-    var fontHref =
-      "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap";
-    var css =
-      "*,*::before,*::after{box-sizing:border-box}html,body{height:100%;margin:0}" +
-      "body{font-family:'Source Serif 4',Georgia,serif;font-size:1.0625rem;line-height:1.7;" +
-      "color:oklch(0.945 0.012 292);background:oklch(0.205 0.018 285);-webkit-font-smoothing:antialiased}" +
-      ".cr-export{max-width:68ch;margin:0 auto;padding:1.5rem 1.5rem 2.5rem}" +
-      ".cr-export>*{min-width:0}" +
-      ".cr-export h1,.cr-export h2,.cr-export h3,.cr-export h4{font-weight:700;letter-spacing:-0.02em;line-height:1.28;color:oklch(0.945 0.012 292)}" +
-      ".cr-export h1{margin:0 0 0.65em;font-size:2rem;padding-bottom:0.35em;border-bottom:1px solid oklch(0.36 0.028 292)}" +
-      ".cr-export h2{margin:1.35em 0 0.45em;font-size:1.45rem;font-weight:600}" +
-      ".cr-export h3{margin:1.25em 0 0.4em;font-size:1.2rem;font-weight:600}" +
-      ".cr-export h4{margin:1.1em 0 0.35em;font-size:1.05rem;font-weight:600}" +
-      ".cr-export p{margin:0.7em 0}" +
-      ".cr-export a{color:oklch(0.74 0.13 28);text-decoration-thickness:1px;text-underline-offset:0.2em}" +
-      ".cr-export strong{font-weight:700}" +
-      ".cr-export hr{margin:2em 0;border:none;height:1px;background:linear-gradient(90deg,transparent,oklch(0.36 0.028 292) 12%,oklch(0.36 0.028 292) 88%,transparent)}" +
-      ".cr-export code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:0.88em;padding:0.12em 0.38em;border-radius:0.375rem;" +
-      "border:1px solid oklch(0.36 0.028 292);background:oklch(0.17 0.02 288)}" +
-      ".cr-export pre{margin:1.1em 0;padding:1rem 1.1rem;overflow:auto;border-radius:0.625rem;border:1px solid oklch(0.36 0.028 292);" +
-      "background:oklch(0.17 0.02 288);box-shadow:inset 0 1px 0 oklch(0.4 0.02 292 / 0.25)}" +
-      ".cr-export pre code{padding:0;border:none;background:transparent;font-size:0.84em;line-height:1.6}" +
-      ".cr-export ul,.cr-export ol{margin:0.65em 0;padding-left:1.35em}" +
-      ".cr-export li{margin:0.35em 0;padding-left:0.25em}" +
-      ".cr-export li::marker{color:oklch(0.62 0.032 292)}" +
-      ".cr-export blockquote{margin:1.1em 0;padding:0.9rem 1.1rem;border-radius:0.5rem;border:1px solid oklch(0.36 0.028 292);" +
-      "background:oklch(0.26 0.035 292 / 0.45);color:oklch(0.62 0.032 292);font-style:italic}" +
-      ".cr-export table{width:100%;margin:1.1em 0;border-collapse:collapse;font-size:0.95em;font-variant-numeric:tabular-nums}" +
-      ".cr-export th,.cr-export td{padding:0.5rem 0.65rem;border:1px solid oklch(0.36 0.028 292);text-align:left}" +
-      ".cr-export th{font-family:ui-sans-serif,system-ui,sans-serif;font-size:0.78em;font-weight:600;text-transform:uppercase;" +
-      "letter-spacing:0.06em;color:oklch(0.62 0.032 292);background:oklch(0.17 0.02 288)}" +
-      ".cr-export img{max-width:100%;height:auto;border-radius:0.5rem;margin:0.75em 0}" +
-      '.cr-export img[src=""]{display:none}';
+    var api = getThemeApi();
+    if (api) {
+      return api.getExportDocumentHtml(sanitizedBodyHtml, currentTheme || api.normTheme({}));
+    }
+    return minimalFallbackExport(sanitizedBodyHtml);
+  }
+
+  function minimalFallbackExport(sanitizedBodyHtml) {
     return (
       "<!DOCTYPE html>\n" +
-      '<html lang="en">\n' +
-      "<head>\n" +
-      '<meta charset="utf-8">\n' +
-      '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
-      "<title>document</title>\n" +
-      '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
-      '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
-      '<link href="' +
-      fontHref +
-      '" rel="stylesheet">\n' +
-      "<style>\n" +
-      css +
-      "\n</style>\n" +
-      "</head>\n" +
-      "<body>\n" +
-      '<main class="cr-export">\n' +
+      '<html lang="en"><head><meta charset="utf-8"><title>document</title></head><body><main class="cr-export">' +
       sanitizedBodyHtml +
-      "\n</main>\n" +
-      "</body>\n" +
-      "</html>\n"
+      "</main></body></html>\n"
     );
+  }
+
+  function loadInitialTheme() {
+    var api = getThemeApi();
+    if (api) {
+      currentTheme = api.loadStoredTheme();
+      return;
+    }
+    currentTheme = { presetId: "evening", colors: {}, fonts: {}, layout: {} };
+  }
+
+  function applyReadingTheme() {
+    var api = getThemeApi();
+    if (api && preview) {
+      api.applyToElement(preview, currentTheme);
+    }
+  }
+
+  function persistTheme() {
+    var api = getThemeApi();
+    if (api) {
+      api.saveTheme(currentTheme);
+    }
+  }
+
+  function updateSlidersFromTheme() {
+    if (!getThemeApi() || !currentTheme) return;
+    var t = getThemeApi().normTheme(currentTheme);
+    var L = t.layout;
+    if (themeBodySize) {
+      themeBodySize.value = String(Math.max(875, Math.min(1400, Math.round(L.bodyFontRem * 1000))));
+    }
+    if (themeLineHeight) {
+      var lh = Math.round(L.lineHeight * 100);
+      themeLineHeight.value = String(Math.max(128, Math.min(200, lh)));
+    }
+    if (themeBodyFont) {
+      var fp = t.fonts && t.fonts.prose;
+      if (fp && themeBodyFont.querySelector("option[value=\"" + fp + "\"]")) {
+        themeBodyFont.value = fp;
+      } else {
+        themeBodyFont.value = "source-serif-4";
+      }
+    }
+  }
+
+  function readThemePanelIntoTheme() {
+    if (!getThemeApi() || !currentTheme) return;
+    var t = getThemeApi().normTheme(currentTheme);
+    var L = Object.assign({}, t.layout);
+    var F = Object.assign({}, t.fonts);
+    if (themeBodySize) {
+      L.bodyFontRem = Math.max(0.875, Math.min(1.4, Number(themeBodySize.value) / 1000));
+    }
+    if (themeLineHeight) {
+      L.lineHeight = Math.max(1.28, Math.min(2, Number(themeLineHeight.value) / 100));
+    }
+    if (themeBodyFont && themeBodyFont.value) {
+      F.prose = themeBodyFont.value;
+    }
+    currentTheme = getThemeApi().normTheme(
+      Object.assign({}, currentTheme, {
+        presetId: "custom",
+        layout: L,
+        fonts: F,
+      })
+    );
+  }
+
+  function populatePresets() {
+    if (!getThemeApi() || !themePreset) return;
+    var list = getThemeApi().PRESET_LIST;
+    var i;
+    for (i = 0; i < list.length; i++) {
+      var opt = document.createElement("option");
+      opt.value = list[i].id;
+      opt.textContent = list[i].label;
+      themePreset.appendChild(opt);
+    }
+    var customOpt = document.createElement("option");
+    customOpt.value = "custom";
+    customOpt.textContent = "Custom";
+    themePreset.appendChild(customOpt);
+  }
+
+  function populateBodyFontSelect() {
+    if (!getThemeApi() || !themeBodyFont) return;
+    var opts = getThemeApi().PROSE_FONT_OPTIONS;
+    var i;
+    for (i = 0; i < opts.length; i++) {
+      var o = document.createElement("option");
+      o.value = opts[i].id;
+      o.textContent = opts[i].label;
+      themeBodyFont.appendChild(o);
+    }
+  }
+
+  function selectPresetInUi() {
+    if (!getThemeApi() || !themePreset || !currentTheme) return;
+    var id = currentTheme.presetId;
+    if (id === "custom") {
+      themePreset.value = "custom";
+      return;
+    }
+    if (themePreset.querySelector("option[value=\"" + id + "\"]")) {
+      themePreset.value = id;
+    } else {
+      themePreset.value = "evening";
+    }
+  }
+
+  function initReadingThemeControls() {
+    if (!getThemeApi()) {
+      if (printThemeBtn) printThemeBtn.hidden = true;
+      if (themeDetails) themeDetails.hidden = true;
+      return;
+    }
+    loadInitialTheme();
+    populatePresets();
+    populateBodyFontSelect();
+    if (
+      currentTheme.presetId &&
+      currentTheme.presetId !== "custom" &&
+      getThemeApi().PRESET_LIST.every(function (p) {
+        return p.id !== currentTheme.presetId;
+      })
+    ) {
+      currentTheme = getThemeApi().getPreset("evening");
+    }
+    selectPresetInUi();
+    updateSlidersFromTheme();
+    applyReadingTheme();
+
+    if (themePreset) {
+      themePreset.addEventListener("change", function () {
+        if (themePreset.value === "custom") return;
+        currentTheme = getThemeApi().getPreset(themePreset.value);
+        updateSlidersFromTheme();
+        applyReadingTheme();
+        persistTheme();
+      });
+    }
+    if (themeBodySize) {
+      themeBodySize.addEventListener("input", function () {
+        readThemePanelIntoTheme();
+        if (themePreset) themePreset.value = "custom";
+        applyReadingTheme();
+        persistTheme();
+      });
+    }
+    if (themeLineHeight) {
+      themeLineHeight.addEventListener("input", function () {
+        readThemePanelIntoTheme();
+        if (themePreset) themePreset.value = "custom";
+        applyReadingTheme();
+        persistTheme();
+      });
+    }
+    if (themeBodyFont) {
+      themeBodyFont.addEventListener("change", function () {
+        readThemePanelIntoTheme();
+        if (themePreset) themePreset.value = "custom";
+        applyReadingTheme();
+        persistTheme();
+      });
+    }
+    if (themeReset) {
+      themeReset.addEventListener("click", function () {
+        currentTheme = getThemeApi().getPreset("evening");
+        if (themePreset) themePreset.value = "evening";
+        updateSlidersFromTheme();
+        applyReadingTheme();
+        persistTheme();
+      });
+    }
+    if (printThemeBtn) {
+      printThemeBtn.addEventListener("click", function () {
+        var safe = markdownToSanitizedHtml(getMarkdownText());
+        if (safe === null) {
+          setAppAlert(
+            "Could not load marked and DOMPurify for print. Check your network connection or refresh the page."
+          );
+          return;
+        }
+        setAppAlert("");
+        var html = buildStandaloneExportHtml(safe);
+        var w = window.open("", "coolreader-print", "popup=yes,width=900,height=1200");
+        if (!w) {
+          setAppAlert("The browser blocked the print window. Allow pop-ups for this site, then try again.");
+          return;
+        }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+        function doPrint() {
+          try {
+            w.focus();
+            w.print();
+          } catch {
+            /* no-op */
+          }
+          setTimeout(function () {
+            try {
+              w.close();
+            } catch {
+              /* no-op */
+            }
+          }, 2000);
+        }
+        w.onload = doPrint;
+        setTimeout(doPrint, 100);
+      });
+    }
+    if (themeDetails) {
+      themeDetails.addEventListener("toggle", function () {
+        var s = themeDetails.querySelector("summary");
+        if (s) s.setAttribute("aria-expanded", themeDetails.open ? "true" : "false");
+      });
+    }
   }
 
   function renderPreview() {
@@ -241,5 +432,7 @@
     setEditorCollapsed(!app.classList.contains("app--editor-collapsed"));
   });
 
+  initReadingThemeControls();
   renderNow();
 })();
+

@@ -25,6 +25,20 @@ export default [
         ...globals.browser,
         marked: "readonly",
         DOMPurify: "readonly",
+        CoolReaderTheme: "readonly",
+      },
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+    },
+  },
+  {
+    files: ["theme.js"],
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: "script",
+      globals: {
+        ...globals.browser,
       },
     },
     rules: {
