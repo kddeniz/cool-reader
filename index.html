@@ -16,7 +16,7 @@
     <title>Cool Reader | Markdown editor with live preview (browser-only)</title>
     <meta
       name="description"
-      content="Cool Reader: free browser markdown editor with live HTML preview, drag-and-drop .md files, export to .md, and DOMPurify-sanitized output. No server or build step. Try cool-reader.com or open index.html locally."
+      content="Cool Reader: free browser markdown editor with live HTML preview, drag-and-drop .md files, export to .md or .html, and DOMPurify-sanitized output. No server or build step. Try cool-reader.com or open index.html locally."
     />
     <link rel="canonical" href="https://cool-reader.com/" />
     <meta name="theme-color" content="#1c1a24" />
@@ -25,14 +25,14 @@
     <meta property="og:title" content="Cool Reader | Markdown editor with live preview" />
     <meta
       property="og:description"
-      content="Write markdown in the browser, see safe live HTML preview. marked + DOMPurify, no backend."
+      content="Write markdown in the browser, see safe live HTML preview, export .md or standalone .html. marked + DOMPurify, no backend."
     />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content="Cool Reader | Markdown editor with live preview" />
     <meta
       name="twitter:description"
-      content="Browser-only markdown editor: live preview, file open/export, DOMPurify sanitization."
+      content="Browser-only markdown editor: live preview, file open, export .md or .html, DOMPurify sanitization."
     />
     <script type="application/ld+json" src="schema-ld.json"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -82,6 +82,9 @@
           </label>
           <button type="button" class="toolbar__download" id="downloadBtn" title="Download current text as .md">
             Download (.md)
+          </button>
+          <button type="button" class="toolbar__download" id="downloadHtmlBtn" title="Download preview as a standalone .html file">
+            Download (.html)
           </button>
         </div>
       </header>

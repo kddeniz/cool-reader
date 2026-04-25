@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Toolbar **Download (.html)**: exports the current markdown as a standalone HTML document (same sanitized body as the live preview, with embedded prose styles and optional Google Fonts link in the export).
 - [RFC 8288](https://www.rfc-editor.org/rfc/rfc8288) `Link` response headers on the home page (Azure Static Web Apps) plus a minimal `/.well-known/api-catalog` and `docs/api.html` for agent / machine discovery.
 - Playwright static server (`scripts/playwright-serve.mjs`): [Markdown for Agents](https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/)–style negotiation for `.html` routes when `Accept` prefers `text/markdown` (`Content-Type: text/markdown`, `Vary: Accept`, `x-markdown-tokens`). Pure Azure Static Web Apps cannot vary by `Accept`; production parity for remote checks needs an edge that supports this (for example Cloudflare **Markdown for Agents** on the zone in front of the origin).
 

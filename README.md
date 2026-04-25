@@ -16,14 +16,14 @@
 
 🚀 **[Live demo](https://cool-reader.com/)** · **📦 [Source on GitHub](https://github.com/kddeniz/cool-reader)**
 
-**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via jsDelivr with **SRI** · Google Fonts for typography · Preview updates debounced at 120ms · CI: HTML validate + ESLint + Playwright on PRs to `main`.
+**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via jsDelivr with **SRI** · Google Fonts for typography · Preview updates debounced at 120ms · Export `.md` or standalone `.html` · CI: HTML validate + ESLint + Playwright on PRs to `main`.
 
 ### Key Features
 
 - ✨ **Real-time Preview:** See your markdown rendered as you type with debounced updates (120ms) for smooth performance
 - 🛡️ **Secure HTML Rendering:** All HTML is sanitized using [DOMPurify](https://github.com/cure53/DOMPurify) to prevent XSS attacks
 - 📄 **File Support:** Open and edit `.md`, `.markdown`, and `.txt` files directly in the browser
-- 💾 **Download:** Export your current markdown as a `.md` file
+- 💾 **Download:** Export your current markdown as a `.md` file, or the sanitized preview as a standalone `.html` file
 - 🎯 **Drag & Drop:** Drop markdown files directly onto the editor panel to load them
 - 📱 **Responsive Design:** Beautiful two-panel layout that adapts to different screen sizes
 - 🌐 **Browser-Only:** No server required—completely client-side execution
@@ -36,7 +36,7 @@
 3. **See Preview:** View rendered HTML in the right panel in real-time
 4. **Load Files:** Click the "Open file" button to load `.md` or text files
 5. **Drag & Drop:** Drag markdown files onto the left panel to load them
-6. **Download:** Click the "Download (.md)" button to download your markdown as a file
+6. **Download:** Click "Download (.md)" for the raw markdown, or "Download (.html)" for a standalone HTML page (same sanitized output as the preview, with embedded typography styles)
 7. **Toggle Panel:** Use the ☰ button to expand/collapse the editor panel for reading mode
 
 ### Project Structure
@@ -45,7 +45,7 @@
 |------|---------|
 | `index.html` | Page skeleton, toolbar, two-panel layout, CDN dependencies for `marked` and `DOMPurify` (pinned + SRI) |
 | `styles.css` | Responsive layout (~50/50 panels), reading mode for left panel, preview typography |
-| `app.js` | Preview rendering with debounce, file handling, drag-and-drop, download functionality, panel toggle |
+| `app.js` | Preview rendering with debounce, file handling, drag-and-drop, Markdown and HTML export, panel toggle |
 | `schema-ld.json` | JSON-LD metadata for search engines (loaded as external `script` to align with CSP) |
 | `staticwebapp.config.json` | Azure Static Web Apps global headers (CSP, `nosniff`, etc.) |
 | `.github/workflows/ci.yml` | Quality checks: `html-validate`, ESLint, Playwright |
@@ -140,14 +140,14 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 
 🚀 **[Canlı demo](https://cool-reader.com/)** · **📦 [Kaynak kodu (GitHub)](https://github.com/kddeniz/cool-reader)**
 
-**Hızlı bilgiler:** MIT Lisansı ([`LICENSE`](LICENSE)) · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2 ve [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6, jsDelivr üzerinden **SRI** ile · Tipografi için Google Fonts · Önizleme 120ms debounce · CI: `main` PR’larında HTML doğrulama + ESLint + Playwright.
+**Hızlı bilgiler:** MIT Lisansı ([`LICENSE`](LICENSE)) · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2 ve [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6, jsDelivr üzerinden **SRI** ile · Tipografi için Google Fonts · Önizleme 120ms debounce · `.md` veya bağımsız `.html` dışa aktarma · CI: `main` PR’larında HTML doğrulama + ESLint + Playwright.
 
 ### Temel Özellikler
 
 - ✨ **Canlı Önizleme:** Markdown yazarken HTML'ye dönüştürülen içeriği debounce edilmiş (120ms) güncellemelerle izleyin
 - 🛡️ **Güvenli HTML İşlemesi:** Tüm HTML, XSS saldırılarını önlemek için [DOMPurify](https://github.com/cure53/DOMPurify) ile temizlenir
 - 📄 **Dosya Desteği:** `.md`, `.markdown` ve `.txt` dosyalarını doğrudan tarayıcıda açın ve düzenleyin
-- 💾 **İndir:** Geçerli markdown dosyasını `.md` olarak dışa aktarın
+- 💾 **İndir:** Geçerli markdown'ı `.md` olarak veya temizlenmiş önizlemeyi bağımsız bir `.html` dosyası olarak dışa aktarın
 - 🎯 **Sürükle-Bırak:** Markdown dosyalarını doğrudan editör paneline bırakarak yükleyin
 - 📱 **Duyarlı Tasarım:** Farklı ekran boyutlarına uyum sağlayan güzel iki panel düzeni
 - 🌐 **Tarayıcı Tabanlı:** Sunucu gerekmez—tamamen istemci tarafı yürütme
@@ -160,7 +160,7 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 3. **Önizlemeyi Görün:** Sağ panelde canlı olarak işlenmiş HTML'yi görüntüleyin
 4. **Dosyaları Yükleyin:** `.md` veya metin dosyalarını yüklemek için "Dosya aç" düğmesini tıklayın
 5. **Sürükle-Bırak:** Sol panele markdown dosyalarını sürükleyerek yükleyin
-6. **İndir:** Markdown dosyasını indirmek için "İndir (.md)" düğmesini tıklayın
+6. **İndir:** Ham markdown için "İndir (.md)", önizleme ile aynı temizlenmiş çıktıyı bağımsız sayfa olarak almak için "İndir (.html)" düğmesini tıklayın
 7. **Paneli Aç/Kapat:** Okuma modu için editör panelini genişletmek/daraltmak üzere ☰ düğmesini kullanın
 
 ### Proje Yapısı
@@ -169,7 +169,7 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 |-------|-------|
 | `index.html` | Sayfa iskeleti, araç çubuğu, iki panel düzeni, `marked` ve `DOMPurify` için sabitlenmiş CDN + SRI |
 | `styles.css` | Duyarlı düzen (~%50-%50 paneller), sol panel için okuma modu, önizleme tipografisi |
-| `app.js` | Debounce ile önizleme işlemesi, dosya işlemleri, sürükle-bırak, indirme işlevi, panel aç/kapat |
+| `app.js` | Debounce ile önizleme, dosya işlemleri, sürükle-bırak, Markdown ve HTML dışa aktarma, panel aç/kapat |
 | `schema-ld.json` | Arama motorları için JSON-LD (CSP ile uyum için harici `script` olarak) |
 | `staticwebapp.config.json` | Azure Static Web Apps genel başlıkları (CSP, `nosniff`, vb.) |
 | `.github/workflows/ci.yml` | Kalite: `html-validate`, ESLint, Playwright |

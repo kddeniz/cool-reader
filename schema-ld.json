@@ -4,11 +4,11 @@
   "name": "Cool Reader",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Web browser",
-  "description": "Client-side markdown editor with live HTML preview, file open and download, drag-and-drop, and DOMPurify-sanitized rendering. No server required.",
+  "description": "Client-side markdown editor with live HTML preview, file open, export to Markdown or standalone HTML, drag-and-drop, and DOMPurify-sanitized rendering. No server required.",
   "url": "https://cool-reader.com/",
   "isAccessibleForFree": true,
   "license": "https://opensource.org/licenses/MIT",
-  "softwareVersion": "1.1.0",
+  "softwareVersion": "1.2.0",
   "author": {
     "@type": "Person",
     "name": "Kürşad"
@@ -17,6 +17,7 @@
     "Live markdown to HTML preview with debounced updates",
     "Open and edit .md, .markdown, and .txt in the browser",
     "Download edited markdown as .md",
+    "Download sanitized preview as a standalone .html file",
     "Drag-and-drop file load onto the editor",
     "HTML sanitized with DOMPurify before DOM insertion"
   ],

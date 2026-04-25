@@ -78,6 +78,27 @@ test.describe("Cool Reader", () => {
     await expect(page.locator("#preview strong")).toHaveText("Bold");
   });
 
+  test("downloads standalone HTML matching sanitized preview", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("#editor").fill("# Exported\n\n**Bold**");
+    const downloadPromise = page.waitForEvent("download");
+    await page.locator("#downloadHtmlBtn").click();
+    const download = await downloadPromise;
+    expect(download.suggestedFilename()).toMatch(/document\.html$/i);
+    const stream = await download.createReadStream();
+    expect(stream).toBeTruthy();
+    const chunks = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    const text = Buffer.concat(chunks).toString("utf8");
+    expect(text).toMatch(/<!DOCTYPE html>/i);
+    expect(text).toContain('<main class="cr-export">');
+    expect(text).toMatch(/<h1[^>]*>Exported<\/h1>/);
+    expect(text).toMatch(/<strong>Bold<\/strong>/);
+    expect(text).not.toContain("<script>");
+  });
+
   test("does not execute script tags from markdown", async ({ page }) => {
     await page.goto("/");
     await page.locator("#editor").fill('<script>window.__coolReaderXss = 1</script>\n\nHello');
