@@ -240,8 +240,12 @@ body {
 }
 
 .app-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
   flex-shrink: 0;
-  padding: 0.45rem 1rem;
+  padding: 0.5rem 1rem 0.55rem;
   border-top: 1px solid var(--border);
   background: var(--surface);
   text-align: center;
@@ -265,6 +269,14 @@ body {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+.app-footer__credit {
+  margin: 0;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--muted);
+  opacity: 0.9;
 }
 
 .pane {

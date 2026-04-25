@@ -80,9 +80,12 @@ test.describe("Cool Reader", () => {
 
   test("footer links to GitHub repository", async ({ page }) => {
     await page.goto("/");
-    const source = page.locator('footer.app-footer a[href="https://github.com/kddeniz/cool-reader"]');
+    const footer = page.locator("footer.app-footer");
+    const source = footer.locator('a[href="https://github.com/kddeniz/cool-reader"]');
     await expect(source).toBeVisible();
     await expect(source).toHaveText("Source on GitHub");
+    await expect(footer.locator(".app-footer__credit")).toContainText("Made with");
+    await expect(footer.locator(".app-footer__credit")).toContainText("Kürşad");
   });
 
   test("renders markdown preview", async ({ page }) => {
