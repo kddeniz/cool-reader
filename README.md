@@ -16,7 +16,7 @@
 
 🚀 **[Live demo](https://cool-reader.com/)** · **📦 [Source on GitHub](https://github.com/kddeniz/cool-reader)**
 
-**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via jsDelivr with **SRI** · Google Fonts for typography · Preview updates debounced at 120ms · Export `.md` or standalone `.html` (embedded reading theme) · **Reading theme** (presets, body font, size, line height) in `localStorage` · **Print** next to downloads, same HTML as export, system dialog for Save as PDF · CI: HTML validate + ESLint + Playwright on PRs to `main`.
+**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via jsDelivr with **SRI** · Google Fonts for typography · Preview updates debounced at 120ms · Export `.md` or standalone `.html` (embedded reading theme) · **Reading theme** (presets, body font, size, line height) in `localStorage` · **Print / PDF** next to downloads, same HTML as export, system dialog for Save as PDF · CI: HTML validate + ESLint + Playwright on PRs to `main`.
 
 ### Key Features
 
@@ -24,8 +24,8 @@
 - 🛡️ **Secure HTML Rendering:** All HTML is sanitized using [DOMPurify](https://github.com/cure53/DOMPurify) to prevent XSS attacks
 - 📄 **File Support:** Open and edit `.md`, `.markdown`, and `.txt` files directly in the browser
 - 💾 **Download:** Export your current markdown as a `.md` file, or the sanitized preview as a standalone `.html` file. The export embeds the same **reading theme** (colors, body font, spacing) as the live preview.
-- **Reading theme:** The **Aa** control in the toolbar offers presets, **body text font** (prose), body size, and line height. Preferences persist in the browser (no account) and apply to the preview, `.html` export, and print. Use **Print** (next to the download buttons) for Save as PDF via the system dialog.
-- **Print / Save as PDF:** Uses the current theme and your rendered markdown. After opening the system print dialog, use “Save as PDF” in the destination menu where your browser offers it.
+- **Reading theme:** The **Aa** control in the toolbar offers presets, **body text font** (prose), body size, and line height. Preferences persist in the browser (no account) and apply to the preview, `.html` export, and print. Use **Print / PDF** (next to the download buttons) for the system print dialog, then pick **Save as PDF** (or a printer) where your browser offers it.
+- **Print / PDF:** Uses the current theme and your rendered markdown. Opens the browser print dialog; choose “Save as PDF” in the destination menu where your browser offers it.
 - 🎯 **Drag & Drop:** Drop markdown files directly onto the editor panel to load them
 - 📱 **Responsive Design:** Beautiful two-panel layout that adapts to different screen sizes
 - 🌐 **Browser-Only:** No server required—completely client-side execution
@@ -39,7 +39,7 @@
 4. **Load Files:** Click the "Open file" button to load `.md` or text files
 5. **Drag & Drop:** Drag markdown files onto the left panel to load them
 6. **Download:** Click "Download (.md)" for the raw markdown, or "Download (.html)" for a standalone HTML page (same sanitized output and reading theme as the preview)
-7. **Print** (beside the download buttons) opens a print view with the same content and theme; choose “Save as PDF” in the destination menu where your browser offers it
+7. **Print / PDF** (beside the download buttons) opens a print view with the same content and theme; in the browser’s print dialog, choose “Save as PDF” (or a printer) where offered
 8. **Reading theme (Aa):** Presets, body text font, body size, and line height; use **Reset** in the panel to restore defaults
 9. **Toggle Panel:** Use the ☰ button to expand/collapse the editor panel for reading mode
 
@@ -153,8 +153,8 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 - 🛡️ **Güvenli HTML İşlemesi:** Tüm HTML, XSS saldırılarını önlemek için [DOMPurify](https://github.com/cure53/DOMPurify) ile temizlenir
 - 📄 **Dosya Desteği:** `.md`, `.markdown` ve `.txt` dosyalarını doğrudan tarayıcıda açın ve düzenleyin
 - 💾 **İndir:** Geçerli markdown'ı `.md` olarak veya temizlenmiş önizlemeyi bağımsız bir `.html` dosyası olarak dışa aktarın; dışa aktarma, canlı önizleme ile aynı **okuma temasını** (renk, font, aralık) gömer.
-- **Okuma teması:** Araç çubuğundaki **Aa** ile ön ayar, **gövde metin fontu**, boyut ve satır yüksekliği ayarlanır. Tercihler yalnızca bu tarayıcıda kalır. **Yazdır** indir düğmelerinin yanında; PDF için sistem penceresinde hedef olarak “PDF olarak kaydet” seçilebilir.
-- **Yazdır / PDF’e kaydet:** Sistem yazdır penceresini açar; hedef olarak tarayıcınızda “PDF olarak kaydet” varsa aynı görünümle kaydedebilirsiniz.
+- **Okuma teması:** Araç çubuğundaki **Aa** ile ön ayar, **gövde metin fontu**, boyut ve satır yüksekliği ayarlanır. Tercihler yalnızca bu tarayıcıda kalır. **Yazdır / PDF** indir düğmelerinin yanında; tarayıcının yazdır penceresinde hedef olarak “PDF olarak kaydet” veya yazıcı seçilebilir.
+- **Yazdır / PDF:** Sistem yazdır penceresini açar; tarayıcınızda “PDF olarak kaydet” veya yazıcı seçerek aynı görünümle çıktı alabilirsiniz.
 - 🎯 **Sürükle-Bırak:** Markdown dosyalarını doğrudan editör paneline bırakarak yükleyin
 - 📱 **Duyarlı Tasarım:** Farklı ekran boyutlarına uyum sağlayan güzel iki panel düzeni
 - 🌐 **Tarayıcı Tabanlı:** Sunucu gerekmez—tamamen istemci tarafı yürütme
@@ -168,7 +168,7 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 4. **Dosyaları Yükleyin:** `.md` veya metin dosyalarını yüklemek için "Dosya aç" düğmesini tıklayın
 5. **Sürükle-Bırak:** Sol panele markdown dosyalarını sürükleyerek yükleyin
 6. **İndir:** Ham markdown için "İndir (.md)", önizleme ve aynı okuma temasıyla "İndir (.html)" düğmesine tıklayın
-7. **Yazdır** (indir düğmelerinin yanında) aynı içerik ve tema ile yazar; PDF için sistem penceresinde "PDF olarak kaydet" seçin
+7. **Yazdır / PDF** (indir düğmelerinin yanında) aynı içerik ve tema ile yazdır penceresini açar; PDF için "PDF olarak kaydet" veya yazıcıyı seçin
 8. **Okuma teması (Aa):** Ön ayar, gövde fontu, boyut ve satır yüksekliği; **Reset** ile varsayılanlar
 9. **Paneli Aç/Kapat:** Okuma modu için editör panelini genişletmek/daraltmak üzere ☰ düğmesini kullanın
 

@@ -259,20 +259,36 @@
         w.document.open();
         w.document.write(html);
         w.document.close();
+        var printInvoked = false;
         function doPrint() {
-          try {
-            w.focus();
-            w.print();
-          } catch {
-            /* no-op */
-          }
-          setTimeout(function () {
+          if (printInvoked) return;
+          printInvoked = true;
+          var closeTimer = null;
+          function tryClose() {
+            if (closeTimer !== null) {
+              clearTimeout(closeTimer);
+              closeTimer = null;
+            }
             try {
               w.close();
             } catch {
               /* no-op */
             }
-          }, 2000);
+          }
+          try {
+            w.focus();
+            w.addEventListener(
+              "afterprint",
+              function () {
+                tryClose();
+              },
+              { once: true }
+            );
+            closeTimer = setTimeout(tryClose, 120000);
+            w.print();
+          } catch {
+            tryClose();
+          }
         }
         w.onload = doPrint;
         setTimeout(doPrint, 100);
@@ -282,6 +298,11 @@
       themeDetails.addEventListener("toggle", function () {
         var s = themeDetails.querySelector("summary");
         if (s) s.setAttribute("aria-expanded", themeDetails.open ? "true" : "false");
+      });
+      document.addEventListener("click", function (e) {
+        if (!themeDetails.open) return;
+        if (themeDetails.contains(e.target)) return;
+        themeDetails.removeAttribute("open");
       });
     }
   }
