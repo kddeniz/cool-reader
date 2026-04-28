@@ -643,6 +643,8 @@ body {
 .pane__inner--preview pre {
   margin: 1.1em 0;
   padding: 1rem 1.1rem;
+  /* Grid + overflow:auto can collapse block height to a one-line scrollport; keep intrinsic multi-line height */
+  min-height: max-content;
   overflow: auto;
   border-radius: var(--radius-lg);
   border: 1px solid var(--cr-prose-border);

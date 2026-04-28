@@ -391,7 +391,7 @@
     "var(--cr-prose-border) 12%,var(--cr-prose-border) 88%,transparent)}" +
     ".cr-export code{font-family:var(--cr-font-code);font-size:0.88em;padding:0.12em 0.38em;border-radius:0.375rem;" +
     "border:1px solid var(--cr-prose-border);background:var(--cr-prose-code-bg)}" +
-    ".cr-export pre{margin:1.1em 0;padding:1rem 1.1rem;overflow:auto;border-radius:0.625rem;border:1px solid " +
+    ".cr-export pre{margin:1.1em 0;padding:1rem 1.1rem;min-height:max-content;overflow:auto;border-radius:0.625rem;border:1px solid " +
     "var(--cr-prose-border);background:var(--cr-prose-code-bg);box-shadow:inset 0 1px 0 var(--cr-prose-pre-inset)}" +
     ".cr-export pre code{padding:0;border:none;background:transparent;font-size:0.84em;line-height:1.6}" +
     ".cr-export ul,.cr-export ol{margin:0.65em 0;padding-left:1.35em}" +
