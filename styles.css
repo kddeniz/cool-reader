@@ -546,11 +546,8 @@ body {
   padding: 1.5rem 1.5rem 2.5rem;
   background: var(--cr-prose-bg);
   scrollbar-color: var(--cr-prose-border) var(--cr-prose-bg);
-  /* One centered column (margin:auto on many siblings is unreliable across browsers) */
-  display: grid;
-  justify-content: center;
-  align-content: start;
-  grid-template-columns: min(100%, var(--cr-prose-max));
+  /* Block flow + centered children: avoids Grid scrollable-<pre> row sizing bugs (collapse / overlap) */
+  display: block;
   font-family: var(--cr-font-prose);
   font-size: var(--cr-prose-size);
   line-height: var(--cr-prose-line-height);
@@ -559,6 +556,8 @@ body {
 
 .pane__inner--preview > * {
   min-width: 0;
+  max-width: min(100%, var(--cr-prose-max));
+  margin-inline: auto;
 }
 
 .pane__inner--preview h1,
@@ -643,8 +642,6 @@ body {
 .pane__inner--preview pre {
   margin: 1.1em 0;
   padding: 1rem 1.1rem;
-  /* Grid + overflow:auto can collapse block height to a one-line scrollport; keep intrinsic multi-line height */
-  min-height: max-content;
   overflow: auto;
   border-radius: var(--radius-lg);
   border: 1px solid var(--cr-prose-border);
