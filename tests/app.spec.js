@@ -122,6 +122,21 @@ test.describe("Cool Reader", () => {
     await expect(page.locator("#preview strong")).toHaveText("Bold");
   });
 
+  test("inserts a tab character on Tab in the editor instead of moving focus", async ({ page }) => {
+    await page.goto("/");
+    const ed = page.locator("#editor");
+    await ed.fill("before");
+    await ed.press("Tab");
+    await ed.press("Tab");
+    await expect(ed).toHaveValue("before\t\t");
+    await ed.fill("a\nb");
+    await ed.evaluate((el) => {
+      el.setSelectionRange(0, 3);
+    });
+    await ed.press("Tab");
+    await expect(ed).toHaveValue("\ta\n\tb");
+  });
+
   test("downloads standalone HTML matching sanitized preview", async ({ page }) => {
     await page.goto("/");
     await page.locator("#editor").fill("# Exported\n\n**Bold**");

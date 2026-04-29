@@ -484,6 +484,47 @@
     });
   }
 
+  function onEditorKeydownTabIndent(e) {
+    if (e.key !== "Tab") return;
+    if (e.defaultPrevented) return;
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+    if (e.shiftKey) return;
+
+    e.preventDefault();
+
+    var ta = editor;
+    var start = ta.selectionStart;
+    var end = ta.selectionEnd;
+    var val = ta.value;
+    var TAB = "\t";
+
+    if (start === end) {
+      ta.value = val.slice(0, start) + TAB + val.slice(end);
+      ta.selectionStart = ta.selectionEnd = start + TAB.length;
+    } else {
+      var startLine = val.lastIndexOf("\n", start - 1) + 1;
+      var endLine = end;
+      while (endLine < val.length && val[endLine] !== "\n") {
+        endLine += 1;
+      }
+      if (endLine < val.length) {
+        endLine += 1;
+      }
+      var block = val.slice(startLine, endLine);
+      var lines = block.split("\n");
+      var indented = lines
+        .map(function (line) {
+          return TAB + line;
+        })
+        .join("\n");
+      ta.value = val.slice(0, startLine) + indented + val.slice(endLine);
+      ta.selectionStart = start + TAB.length;
+      ta.selectionEnd = end + TAB.length * lines.length;
+    }
+
+    scheduleRender();
+  }
+
   syncScrollEnabled = loadSyncScrollPref();
   updateSyncScrollToggleUi();
 
@@ -502,6 +543,7 @@
   }
 
   editor.addEventListener("input", scheduleRender);
+  editor.addEventListener("keydown", onEditorKeydownTabIndent);
 
   fileInput.addEventListener("change", function () {
     var file = pickFileFromList(fileInput.files);
