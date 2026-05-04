@@ -6,6 +6,7 @@
   "operatingSystem": "Web browser",
   "description": "Client-side markdown editor with live HTML preview, file open, export to Markdown or standalone HTML, drag-and-drop, and DOMPurify-sanitized rendering. No server required.",
   "url": "https://cool-reader.com/",
+  "image": "https://cool-reader.com/icon.svg",
   "isAccessibleForFree": true,
   "license": "https://opensource.org/licenses/MIT",
   "softwareVersion": "1.2.0",

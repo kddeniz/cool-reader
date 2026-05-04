@@ -19,6 +19,8 @@
       content="Cool Reader: free browser markdown editor with live HTML preview, drag-and-drop .md files, export to .md or .html, and DOMPurify-sanitized output. No server or build step. Try cool-reader.com or open index.html locally."
     />
     <link rel="canonical" href="https://cool-reader.com/" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
     <meta name="theme-color" content="#1c1a24" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://cool-reader.com/" />
@@ -69,10 +71,21 @@
             <span class="toolbar__toggle-icon" aria-hidden="true">☰</span>
           </button>
           <div class="toolbar__identity">
-            <span class="toolbar__brand">Cool Reader</span>
-            <p class="toolbar__tagline" id="toolbarTagline">
-              Browser-only Markdown with live, sanitized HTML preview. Open or export .md and .html. No account.
-            </p>
+            <img
+              class="toolbar__logo"
+              src="icon.svg"
+              width="36"
+              height="36"
+              alt=""
+              aria-hidden="true"
+              decoding="async"
+            />
+            <div class="toolbar__identity-copy">
+              <span class="toolbar__brand">Cool Reader</span>
+              <p class="toolbar__tagline" id="toolbarTagline">
+                Browser-only Markdown with live, sanitized HTML preview. Open or export .md and .html. No account.
+              </p>
+            </div>
           </div>
         </div>
         <div class="toolbar__actions">

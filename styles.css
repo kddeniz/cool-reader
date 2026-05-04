@@ -122,11 +122,26 @@ body {
 
 .toolbar__identity {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  max-width: min(42rem, 100%);
+}
+
+.toolbar__logo {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 0.45rem;
+}
+
+.toolbar__identity-copy {
+  display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.15rem;
   min-width: 0;
-  max-width: min(42rem, 100%);
 }
 
 .toolbar__brand {
