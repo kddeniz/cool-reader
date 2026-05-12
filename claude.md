@@ -17,10 +17,10 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 
 | Dosya | Açıklama |
 |--------|-----------|
-| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel, Google Analytics (gtag.js + küçük inline init), jsDelivr üzerinden sabit sürüm + SRI ile `marked` ve `DOMPurify` |
-| `styles.css` | Düzen (yaklaşık 50/50 paneller), sol panel daraltılmış tam genişlik okuma modu, önizleme tipografisi, editör `:focus-visible` halkası |
-| `theme.js` | Okuma teması (sürümlü JSON, `localStorage`), canlı önizleme ve `.html` dışa aktarmada paylaşılan `--cr-*` değişkenleri ve dışa aktarma `<style>` üreticisi |
-| `app.js` | Debounce ile önizleme, okuma teması (Aa) ve `localStorage`, dosya açma, sürükle-bırak, `.md` / bağımsız `.html` dışa aktarma, sistem yazdırma ile aynı HTML, sol panel aç/kapa, `#appAlert` |
+| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel, Google Analytics (gtag.js + küçük inline init), jsDelivr üzerinden sabit sürüm + SRI ile `marked`, `DOMPurify` ve `mermaid` |
+| `styles.css` | Düzen (yaklaşık 50/50 paneller), sol panel daraltılmış tam genişlik okuma modu, önizleme tipografisi, Mermaid kapsayıcı taşması, editör `:focus-visible` halkası |
+| `theme.js` | Okuma teması (sürümlü JSON, `localStorage`), canlı önizleme ve `.html` dışa aktarmada paylaşılan `--cr-*` değişkenleri, dışa aktarma `<style>` üreticisi ve Mermaid betiği + başlatma |
+| `app.js` | Debounce ile önizleme, `marked` Mermaid çiti işlemesi, Mermaid `run`, okuma teması (Aa) ve `localStorage`, dosya açma, sürükle-bırak, `.md` / bağımsız `.html` dışa aktarma, sistem yazdırma ile aynı HTML, sol panel aç/kapa, `#appAlert` |
 | `schema-ld.json` | JSON-LD (CSP ile uyum için harici dosya; `softwareVersion` burada) |
 | `staticwebapp.config.json` | Azure Static Web Apps: CSP ve diğer güvenlik başlıkları |
 | `package.json` | Yalnızca geliştirme: ESLint, html-validate, Playwright |
@@ -38,7 +38,7 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 1. **Yazma:** Metin `textarea` içinde düzenlenir; aynı metin kaynağından önizleme üretilir.
 2. **Dosya aç:** Araç çubuğundaki dosya seçici ile `.md` / metin dosyası yüklenir; içerik editöre yazılır ve önizleme güncellenir.
 3. **Sürükle-bırak:** Dosya sol editör alanına bırakılır; çoklu dosyada öncelik `.md` uzantılı dosyadadır.
-4. **Dışa aktarma:** Araç çubuğunda ham metin `.md` olarak; `marked` + DOMPurify çıktısı, seçili okuma temasıyla aynı gömülü stillerle bağımsız `.html` olarak. **Yazdır** düğmesi, indir düğmelerinin yanındadır; aynı HTML dizesiyle açılır, sistem yazdır penceresinde “Save as PDF” (sunucu yok).
+4. **Dışa aktarma:** Araç çubuğunda ham metin `.md` olarak; `marked` + DOMPurify çıktısı, seçili okuma temasıyla aynı gömülü stillerle bağımsız `.html` olarak; ` ```mermaid ` çitleri önizlemede ve dışa aktarılan/yazdırılan HTML’de Mermaid ile diyagram olarak çizilir. **Yazdır** düğmesi, indir düğmelerinin yanındadır; aynı HTML dizesiyle açılır, sistem yazdır penceresinde “Save as PDF” (sunucu yok).
 5. **Okuma teması:** `Aa` paneli: ön ayar, gövde metin fontu, metin boyutu, satır yüksekliği, **Reset** (`theme.js` + `#preview` üzerinde CSS değişkenleri). Tercihler `localStorage`’da; uygulama kromu varsayılan, özelleşen alan önizleme + dışa aktarma.
 
 ## Güvenlik
@@ -46,13 +46,13 @@ Statik, tarayıcıda çalışan bir markdown editör ve önizleyicidir: sol pane
 Markdown’dan üretilen HTML, `innerHTML` ile basılmadan önce **DOMPurify** ile sanitize edilir. Yeni özelliklerde ham HTML enjeksiyonu riskine dikkat edin.
 
 - Üçüncü taraf betiklerde **SRI** (`integrity`) kullanılır; sürüm yükseltirken hash’leri yeniden üretin.
-- Üretimde Azure SWA kullanılıyorsa `staticwebapp.config.json` içindeki **CSP** ve başlıklar, uygulamanın izin verdiği kaynaklarla uyumlu tutulmalıdır (`cdn.jsdelivr.net`, `googletagmanager.com`, Google Analytics `connect-src` uçları, inline gtag init için `sha256-…`).
+- Üretimde Azure SWA kullanılıyorsa `staticwebapp.config.json` içindeki **CSP** ve başlıklar, uygulamanın izin verdiği kaynaklarla uyumlu tutulmalıdır (`cdn.jsdelivr.net`, `googletagmanager.com`, Google Analytics `connect-src` uçları, inline gtag init için `sha256-…`, Mermaid diyagramları için `style-src` içinde kontrollü `'unsafe-inline'`, gerekirse `worker-src`).
 - Güvenlik açığı bildirimi: `SECURITY.md`.
 
 ## Nasıl çalıştırılır
 
 - `index.html` dosyasını tarayıcıda açın (`file://`) veya klasörü herhangi bir statik dosya sunucusu ile servis edin.
-- Önizleme için jsDelivr üzerinden `marked` ve `DOMPurify` yüklenir (SRI ile); çevrimdışı kullanım için bu bağımlılıkların yerel kopyalanması ve `index.html` + SRI güncellenmesi gerekir. Google Fonts ayrıca `fonts.googleapis.com` / `fonts.gstatic.com` çağırır. Barındırılan sitede Google Analytics (gtag) da yüklenir; CSP buna göre güncellenir.
+- Önizleme için jsDelivr üzerinden `marked`, `DOMPurify` ve `mermaid` yüklenir (SRI ile); çevrimdışı kullanım için bu bağımlılıkların yerel kopyalanması ve `index.html` + SRI güncellenmesi gerekir. Google Fonts ayrıca `fonts.googleapis.com` / `fonts.gstatic.com` çağırır. Barındırılan sitede Google Analytics (gtag) da yüklenir; CSP buna göre güncellenir.
 
 ## Sürdürülebilirlik ve dokümantasyon
 

@@ -16,12 +16,13 @@
 
 🚀 **[Live demo](https://cool-reader.com/)** · **📦 [Source on GitHub](https://github.com/kddeniz/cool-reader)**
 
-**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse) and [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize) via jsDelivr with **SRI** · Google Fonts for typography · [Google Analytics](https://developers.google.com/analytics) (gtag) on the hosted site · Preview updates debounced at 120ms · Export `.md` or standalone `.html` (embedded reading theme) · **Reading theme** (presets, body font, size, line height) in `localStorage` · **Print / PDF** next to downloads, same HTML as export, system dialog for Save as PDF · CI: HTML validate + ESLint + Playwright on PRs to `main`.
+**Quick facts (for humans and AI summaries):** MIT License ([`LICENSE`](LICENSE)) · Dependencies: [marked](https://marked.js.org/) v12.0.2 (parse), [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 (sanitize), and [Mermaid](https://mermaid.js.org/) v11.4.1 (diagrams) via jsDelivr with **SRI** · Google Fonts for typography · [Google Analytics](https://developers.google.com/analytics) (gtag) on the hosted site · Preview updates debounced at 120ms · Export `.md` or standalone `.html` (embedded reading theme + Mermaid bootstrap) · **Reading theme** (presets, body font, size, line height) in `localStorage` · **Print / PDF** next to downloads, same HTML as export, system dialog for Save as PDF · CI: HTML validate + ESLint + Playwright on PRs to `main`.
 
 ### Key Features
 
 - ✨ **Real-time Preview:** See your markdown rendered as you type with debounced updates (120ms) for smooth performance
 - 🛡️ **Secure HTML Rendering:** All HTML is sanitized using [DOMPurify](https://github.com/cure53/DOMPurify) to prevent XSS attacks
+- 📊 **Mermaid diagrams:** Fenced code blocks with language `mermaid` render as diagrams in the preview and in exported / printed HTML (same pinned CDN bundle as the app).
 - 📄 **File Support:** Open and edit `.md`, `.markdown`, and `.txt` files directly in the browser
 - 💾 **Download:** Export your current markdown as a `.md` file, or the sanitized preview as a standalone `.html` file. The export embeds the same **reading theme** (colors, body font, spacing) as the live preview.
 - **Reading theme:** The **Aa** control in the toolbar offers presets, **body text font** (prose), body size, and line height. Preferences persist in the browser (no account) and apply to the preview, `.html` export, and print. Use **Print / PDF** (next to the download buttons) for the system print dialog, then pick **Save as PDF** (or a printer) where your browser offers it.
@@ -29,7 +30,7 @@
 - 🎯 **Drag & Drop:** Drop markdown files directly onto the editor panel to load them
 - 📱 **Responsive Design:** Beautiful two-panel layout that adapts to different screen sizes
 - 🌐 **Browser-Only:** No server required—completely client-side execution
-- ⚡ **Lightweight:** Minimal dependencies (only [marked](https://marked.js.org/) for parsing and DOMPurify for sanitization)
+- ⚡ **Lightweight:** Small client dependency set: [marked](https://marked.js.org/) (parse), [DOMPurify](https://github.com/cure53/DOMPurify) (sanitize), and [Mermaid](https://mermaid.js.org/) (diagrams), all pinned on jsDelivr with SRI
 
 ### How to Use
 
@@ -47,7 +48,7 @@
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Page skeleton, toolbar, two-panel layout, Google Analytics (gtag), CDN dependencies for `marked` and `DOMPurify` (pinned + SRI) |
+| `index.html` | Page skeleton, toolbar, two-panel layout, Google Analytics (gtag), CDN dependencies for `marked`, `DOMPurify`, and `mermaid` (pinned + SRI) |
 | `styles.css` | Responsive layout (~50/50 panels), reading mode for left panel, preview typography (`--cr-*` reading tokens) |
 | `theme.js` | Versioned `ReadingTheme` data, defaults, browser `localStorage`, and shared CSS for the preview, `.html` export, and print view |
 | `app.js` | Preview rendering with debounce, file handling, drag-and-drop, Markdown and HTML export, print, reading theme UI, panel toggle |
@@ -72,26 +73,27 @@ Markdown-generated HTML is sanitized with **DOMPurify** before being inserted in
 
 - **Reporting:** see [`SECURITY.md`](SECURITY.md) for how to disclose vulnerabilities responsibly.
 - **Supply chain:** third-party scripts use pinned versions and **Subresource Integrity** (`integrity` on `<script>` tags).
-- **Hosting:** when deployed on Azure Static Web Apps, [`staticwebapp.config.json`](staticwebapp.config.json) adds defense-in-depth headers (including a CSP aligned with this repo’s third-party origins).
+- **Hosting:** when deployed on Azure Static Web Apps, [`staticwebapp.config.json`](staticwebapp.config.json) adds defense-in-depth headers (including a CSP aligned with this repo’s third-party origins). `style-src` allows `'unsafe-inline'` for Mermaid diagram SVG; `script-src` does not use `'unsafe-inline'` (gtag uses a fixed hash).
 
 ### Dependencies
 
 - **[marked](https://marked.js.org/)** (v12.0.2 via CDN) - Markdown parser
 - **[DOMPurify](https://github.com/cure53/DOMPurify)** (v3.1.6 via CDN) - HTML sanitizer
+- **[Mermaid](https://mermaid.js.org/)** (v11.4.1 via CDN) - Diagram rendering for fenced ` ```mermaid ` blocks
 
-Both are loaded from jsDelivr with SRI. **Google Fonts** are loaded from `fonts.googleapis.com` / `fonts.gstatic.com` (stylesheet URLs are not practical to pin with SRI the same way as single-file scripts; for stricter offline/privacy needs, self-host fonts and remove the Google `<link>` tags).
+All are loaded from jsDelivr with SRI. **Google Fonts** are loaded from `fonts.googleapis.com` / `fonts.gstatic.com` (stylesheet URLs are not practical to pin with SRI the same way as single-file scripts; for stricter offline/privacy needs, self-host fonts and remove the Google `<link>` tags).
 
-For offline use, vendor `marked` and `DOMPurify` locally, update `index.html` script `src` paths, and **recompute SRI hashes** for the new files.
+For offline use, vendor `marked`, `DOMPurify`, and `mermaid` locally, update `index.html` script `src` paths, and **recompute SRI hashes** for the new files.
 
 ### Common questions
 
 **Does Cool Reader send my Markdown to a server?** No. Parsing and sanitization run entirely in your browser; the app does not upload your markdown to a Cool Reader–hosted backend.
 
-**Does opening the app contact third parties?** Yes: pinned `marked` / DOMPurify from jsDelivr, Google Fonts, and (on the hosted site) Google Analytics via Google Tag Manager. Analytics collects aggregated usage as configured in GA; your markdown text is not sent to Cool Reader servers.
+**Does opening the app contact third parties?** Yes: pinned `marked` / `DOMPurify` / `mermaid` from jsDelivr, Google Fonts, and (on the hosted site) Google Analytics via Google Tag Manager. Analytics collects aggregated usage as configured in GA; your markdown text is not sent to Cool Reader servers.
 
 **Does the hosted site use analytics?** Yes. `index.html` and `docs/api.html` load Google Analytics (gtag). `staticwebapp.config.json` CSP allows those endpoints alongside jsDelivr and Fonts.
 
-**Can I use it offline?** After the first load you still need the bundled or CDN scripts; for fully offline use, vendor `marked` and `DOMPurify` locally and point `index.html` to those files.
+**Can I use it offline?** After the first load you still need the bundled or CDN scripts; for fully offline use, vendor `marked`, `DOMPurify`, and `mermaid` locally and point `index.html` to those files.
 
 ### How to Run
 
@@ -147,12 +149,13 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 
 🚀 **[Canlı demo](https://cool-reader.com/)** · **📦 [Kaynak kodu (GitHub)](https://github.com/kddeniz/cool-reader)**
 
-**Hızlı bilgiler:** MIT Lisansı ([`LICENSE`](LICENSE)) · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2 ve [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6, jsDelivr üzerinden **SRI** ile · Tipografi için Google Fonts · Barındırılan sitede [Google Analytics](https://developers.google.com/analytics) (gtag) · Önizleme 120ms debounce · Okuma teması (ön ayar + kaydırıcılar) tarayıcı `localStorage`’da · `.md` / bağımsız `.html` dışa aktarma (gömülü tema) · Yazdır / PDF kaydet, indirilen HTML ile aynı boru · CI: `main` PR’larında HTML doğrulama + ESLint + Playwright.
+**Hızlı bilgiler:** MIT Lisansı ([`LICENSE`](LICENSE)) · Bağımlılıklar: [marked](https://marked.js.org/) v12.0.2, [DOMPurify](https://github.com/cure53/DOMPurify) v3.1.6 ve [Mermaid](https://mermaid.js.org/) v11.4.1, jsDelivr üzerinden **SRI** ile · Tipografi için Google Fonts · Barındırılan sitede [Google Analytics](https://developers.google.com/analytics) (gtag) · Önizleme 120ms debounce · Okuma teması (ön ayar + kaydırıcılar) tarayıcı `localStorage`’da · `.md` / bağımsız `.html` dışa aktarma (gömülü tema + Mermaid) · Yazdır / PDF kaydet, indirilen HTML ile aynı boru · CI: `main` PR’larında HTML doğrulama + ESLint + Playwright.
 
 ### Temel Özellikler
 
 - ✨ **Canlı Önizleme:** Markdown yazarken HTML'ye dönüştürülen içeriği debounce edilmiş (120ms) güncellemelerle izleyin
 - 🛡️ **Güvenli HTML İşlemesi:** Tüm HTML, XSS saldırılarını önlemek için [DOMPurify](https://github.com/cure53/DOMPurify) ile temizlenir
+- 📊 **Mermaid diyagramları:** `mermaid` dilli çitli kod blokları önizlemede ve dışa aktarılan / yazdırılan HTML’de diyagram olarak çizilir (uygulama ile aynı sabit CDN paketi).
 - 📄 **Dosya Desteği:** `.md`, `.markdown` ve `.txt` dosyalarını doğrudan tarayıcıda açın ve düzenleyin
 - 💾 **İndir:** Geçerli markdown'ı `.md` olarak veya temizlenmiş önizlemeyi bağımsız bir `.html` dosyası olarak dışa aktarın; dışa aktarma, canlı önizleme ile aynı **okuma temasını** (renk, font, aralık) gömer.
 - **Okuma teması:** Araç çubuğundaki **Aa** ile ön ayar, **gövde metin fontu**, boyut ve satır yüksekliği ayarlanır. Tercihler yalnızca bu tarayıcıda kalır. **Yazdır / PDF** indir düğmelerinin yanında; tarayıcının yazdır penceresinde hedef olarak “PDF olarak kaydet” veya yazıcı seçilebilir.
@@ -160,7 +163,7 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 - 🎯 **Sürükle-Bırak:** Markdown dosyalarını doğrudan editör paneline bırakarak yükleyin
 - 📱 **Duyarlı Tasarım:** Farklı ekran boyutlarına uyum sağlayan güzel iki panel düzeni
 - 🌐 **Tarayıcı Tabanlı:** Sunucu gerekmez—tamamen istemci tarafı yürütme
-- ⚡ **Hafif:** Minimal bağımlılıklar (yalnızca [marked](https://marked.js.org/) ayrıştırma ve DOMPurify temizlemesi için)
+- ⚡ **Hafif:** Küçük istemci bağımlılık seti: [marked](https://marked.js.org/) (ayrıştırma), [DOMPurify](https://github.com/cure53/DOMPurify) (temizleme) ve [Mermaid](https://mermaid.js.org/) (diyagramlar); hepsi jsDelivr’da sabit sürüm + SRI
 
 ### Nasıl Kullanılır
 
@@ -178,7 +181,7 @@ This project is licensed under the MIT License — see [`LICENSE`](LICENSE).
 
 | Dosya | Amacı |
 |-------|-------|
-| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel düzeni, Google Analytics (gtag), `marked` ve `DOMPurify` için sabitlenmiş CDN + SRI |
+| `index.html` | Sayfa iskeleti, araç çubuğu, iki panel düzeni, Google Analytics (gtag), `marked`, `DOMPurify` ve `mermaid` için sabitlenmiş CDN + SRI |
 | `styles.css` | Duyarlı düzen (~%50-%50 paneller), sol panel için okuma modu, önizleme tipografisi (`--cr-*` okuma değişkenleri) |
 | `theme.js` | Sürümlü okuma teması, varsayılanlar, `localStorage`, önizleme / `.html` / yazdır için paylaşılan stil |
 | `app.js` | Debounce ile önizleme, dosya, sürükle-bırak, Markdown ve HTML dışa aktarma, yazdır, okuma teması arayüzü, panel aç/kapat |
@@ -209,20 +212,21 @@ Markdown tarafından üretilen HTML, `innerHTML` aracılığıyla DOM'a eklenmed
 
 - **[marked](https://marked.js.org/)** (jsDelivr, v12.0.2, SRI ile) - Markdown ayrıştırıcı
 - **[DOMPurify](https://github.com/cure53/DOMPurify)** (jsDelivr, v3.1.6, SRI ile) - HTML temizleyici
+- **[Mermaid](https://mermaid.js.org/)** (jsDelivr, v11.4.1, SRI ile) - ` ```mermaid ` çitleri için diyagram
 
 **Google Fonts** `fonts.googleapis.com` / `fonts.gstatic.com` üzerinden yüklenir (tek dosya betikleri gibi SRI ile sabitlemek zordur; daha katı gizlilik/çevrimdışı için fontları self-host edip Google `<link>` etiketlerini kaldırın).
 
-Çevrimdışı kullanım için bu kütüphaneleri yerel olarak indirin, `index.html` içindeki `src` yollarını güncelleyin ve **SRI özetlerini yeniden hesaplayın**.
+Çevrimdışı kullanım için bu kütüphaneleri (`marked`, `DOMPurify`, `mermaid`) yerel olarak indirin, `index.html` içindeki `src` yollarını güncelleyin ve **SRI özetlerini yeniden hesaplayın**.
 
 ### Sık sorulanlar
 
 **Markdown'ım bir sunucuya gönderiliyor mu?** Hayır. Ayrıştırma ve temizleme tamamen tarayıcıda çalışır; Cool Reader’a ait bir sunucuya markdown yüklenmez.
 
-**Uygulama üçüncü taraflara bağlanıyor mu?** Evet: jsDelivr üzerinden sabitlenmiş `marked` / DOMPurify, Google Fonts ve (barındırılan sitede) Google Tag Manager üzerinden Google Analytics. GA toplu kullanım verisi toplar; markdown metniniz Cool Reader sunucularına gönderilmez.
+**Uygulama üçüncü taraflara bağlanıyor mu?** Evet: jsDelivr üzerinden sabitlenmiş `marked` / `DOMPurify` / `mermaid`, Google Fonts ve (barındırılan sitede) Google Tag Manager üzerinden Google Analytics. GA toplu kullanım verisi toplar; markdown metniniz Cool Reader sunucularına gönderilmez.
 
 **Barındırılan sitede analitik var mı?** Evet. `index.html` ve `docs/api.html` Google Analytics (gtag) yükler. `staticwebapp.config.json` CSP’si bunları jsDelivr ve Fonts ile birlikte açıkça listeler.
 
-**Çevrimdışi kullanabilir miyim?** İlk yüklemeden sonra da betiklere ihtiyaç vardır; tam çevrimdışı için `marked` ve `DOMPurify` dosyalarını yerel olarak ekleyip `index.html` içindeki yolları onlara yönlendirin.
+**Çevrimdışi kullanabilir miyim?** İlk yüklemeden sonra da betiklere ihtiyaç vardır; tam çevrimdışı için `marked`, `DOMPurify` ve `mermaid` dosyalarını yerel olarak ekleyip `index.html` içindeki yolları onlara yönlendirin.
 
 ### Nasıl Çalıştırılır
 

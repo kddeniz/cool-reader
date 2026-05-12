@@ -4,6 +4,10 @@
 
   var STORAGE_KEY = "coolReader.readingTheme.v1";
 
+  /** Same script as index.html (mermaid@11.4.1); bump both when upgrading. */
+  var MERMAID_SCRIPT_SRC = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js";
+  var MERMAID_SCRIPT_INTEGRITY = "sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I";
+
   /** @typedef {{ stack: string, gFamily: string, gSpec: string }} FontDef */
 
   var FONT_CHOICES = {
@@ -405,7 +409,9 @@
     ".cr-export th{font-family:ui-sans-serif,system-ui,sans-serif;font-size:0.78em;font-weight:600;" +
     "text-transform:uppercase;letter-spacing:0.06em;color:var(--cr-prose-th-text);background:var(--cr-prose-table-header-bg)}" +
     ".cr-export img{max-width:100%;height:auto;border-radius:0.5rem;margin:0.75em 0}" +
-    ".cr-export img[src=\"\"]{display:none}";
+    ".cr-export img[src=\"\"]{display:none}" +
+    ".cr-export pre.mermaid,.cr-export .mermaid{margin:1.1em 0;max-width:100%;overflow-x:auto}" +
+    ".cr-export pre.mermaid svg,.cr-export .mermaid svg{max-width:100%;height:auto}";
 
   var PRINT_MEDIA =
     "@media print{body{background:var(--cr-prose-bg) !important}.cr-export{max-width:none;padding:0.5rem 0}}";
@@ -449,6 +455,24 @@
       '<main class="cr-export">\n' +
       sanitizedBodyHtml +
       "\n</main>\n" +
+      '<script src="' +
+      MERMAID_SCRIPT_SRC +
+      '" integrity="' +
+      MERMAID_SCRIPT_INTEGRITY +
+      '" crossorigin="anonymous"></script>\n' +
+      "<script>\n" +
+      "window.addEventListener('load',function(){\n" +
+      "  try {\n" +
+      "    if (typeof mermaid === 'undefined') return;\n" +
+      "    mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'neutral' });\n" +
+      "    var root = document.querySelector('main.cr-export');\n" +
+      "    if (!root) return;\n" +
+      "    var nodes = root.querySelectorAll('pre.mermaid');\n" +
+      "    if (!nodes.length) return;\n" +
+      "    mermaid.run({ nodes: nodes, suppressErrors: true });\n" +
+      "  } catch (e) {}\n" +
+      "});\n" +
+      "</script>\n" +
       "</body>\n" +
       "</html>\n"
     );
@@ -472,6 +496,8 @@
 
   global.CoolReaderTheme = {
     STORAGE_KEY: STORAGE_KEY,
+    MERMAID_SCRIPT_SRC: MERMAID_SCRIPT_SRC,
+    MERMAID_SCRIPT_INTEGRITY: MERMAID_SCRIPT_INTEGRITY,
     DEFAULT_THEME: DEFAULT_THEME,
     PRESET_LIST: PRESET_LIST,
     PRESET_THEMES: PRESET_THEMES,

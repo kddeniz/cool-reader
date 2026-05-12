@@ -25,6 +25,7 @@ export default [
         ...globals.browser,
         marked: "readonly",
         DOMPurify: "readonly",
+        mermaid: "readonly",
         CoolReaderTheme: "readonly",
       },
     },

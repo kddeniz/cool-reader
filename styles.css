@@ -664,6 +664,20 @@ body {
   box-shadow: inset 0 1px 0 var(--cr-prose-pre-inset);
 }
 
+.pane__inner--preview pre.mermaid,
+.pane__inner--preview .mermaid {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1.1em 0;
+}
+
+.pane__inner--preview pre.mermaid svg,
+.pane__inner--preview .mermaid svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 .pane__inner--preview pre code {
   padding: 0;
   border: none;

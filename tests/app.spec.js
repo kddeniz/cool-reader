@@ -62,7 +62,10 @@ test.describe("Cool Reader", () => {
     expect(policy).toMatch(/connect-src[^;]*https:\/\/www\.google-analytics\.com/i);
     expect(policy).toMatch(/connect-src[^;]*https:\/\/region1\.google-analytics\.com/i);
     expect(policy).toMatch(/connect-src[^;]*https:\/\/www\.googletagmanager\.com/i);
-    expect(policy).not.toMatch(/'unsafe-inline'/i);
+    const scriptSrc = policy.match(/script-src[^;]*/i);
+    expect(scriptSrc).toBeTruthy();
+    expect(scriptSrc[0]).not.toMatch(/'unsafe-inline'/i);
+    expect(policy).toMatch(/style-src[^;]*'unsafe-inline'/i);
   });
 
   test("README documents Google Analytics (English section)", () => {
@@ -122,6 +125,12 @@ test.describe("Cool Reader", () => {
     await expect(page.locator("#preview strong")).toHaveText("Bold");
   });
 
+  test("renders fenced mermaid block as SVG in preview", async ({ page }) => {
+    await page.goto("/");
+    await page.locator("#editor").fill("```mermaid\nflowchart LR\nA-->B\n```");
+    await expect(page.locator("#preview svg")).toBeVisible({ timeout: 20000 });
+  });
+
   test("inserts a tab character on Tab in the editor instead of moving focus", async ({ page }) => {
     await page.goto("/");
     const ed = page.locator("#editor");
@@ -157,7 +166,10 @@ test.describe("Cool Reader", () => {
     expect(text).toMatch(/--cr-prose-text/);
     expect(text).toMatch(/<h1[^>]*>Exported<\/h1>/);
     expect(text).toMatch(/<strong>Bold<\/strong>/);
-    expect(text).not.toContain("<script>");
+    const mainMatch = text.match(/<main class="cr-export">([\s\S]*?)<\/main>/);
+    expect(mainMatch).toBeTruthy();
+    expect(mainMatch[1]).not.toMatch(/<script/i);
+    expect(text).toMatch(/cdn\.jsdelivr\.net\/npm\/mermaid@/i);
   });
 
   test("does not execute script tags from markdown", async ({ page }) => {

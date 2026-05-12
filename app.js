@@ -30,6 +30,50 @@
   var editorSyncRaf = null;
   var previewSyncRaf = null;
 
+  var mermaidInitialized = false;
+
+  function escapeHtmlForMermaidDiagram(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  }
+
+  function installMarkedMermaidSupport() {
+    if (typeof marked === "undefined" || typeof marked.use !== "function") return;
+    marked.use({
+      renderer: {
+        code: function (text, lang) {
+          var l = String(lang || "").trim().toLowerCase();
+          if (l === "mermaid" || l === "mmd") {
+            return "<pre class=\"mermaid\">" + escapeHtmlForMermaidDiagram(text) + "</pre>\n";
+          }
+          return false;
+        },
+      },
+    });
+  }
+
+  function ensureMermaidInitialized() {
+    if (mermaidInitialized) return;
+    if (typeof mermaid === "undefined") return;
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "neutral",
+    });
+    mermaidInitialized = true;
+  }
+
+  function runMermaidOnPreview() {
+    if (!preview || typeof mermaid === "undefined") {
+      return Promise.resolve();
+    }
+    ensureMermaidInitialized();
+    var blocks = preview.querySelectorAll("pre.mermaid");
+    if (!blocks.length) return Promise.resolve();
+    return mermaid.run({ nodes: blocks, suppressErrors: true }).catch(function () {});
+  }
+
+  installMarkedMermaidSupport();
+
   function getThemeApi() {
     if (!TR) return null;
     return TR;
@@ -155,11 +199,28 @@
   }
 
   function minimalFallbackExport(sanitizedBodyHtml) {
+    var ms = "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js";
+    var mint = "sha384-rbtjAdnIQE/aQJGEgXrVUlMibdfTSa4PQju4HDhN3sR2PmaKFzhEafuePsl9H/9I";
+    if (TR && TR.MERMAID_SCRIPT_SRC) {
+      ms = TR.MERMAID_SCRIPT_SRC;
+      mint = TR.MERMAID_SCRIPT_INTEGRITY;
+    }
     return (
       "<!DOCTYPE html>\n" +
-      '<html lang="en"><head><meta charset="utf-8"><title>document</title></head><body><main class="cr-export">' +
+      '<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
+      "<title>document</title></head><body><main class=\"cr-export\">" +
       sanitizedBodyHtml +
-      "</main></body></html>\n"
+      "</main>" +
+      '<script src="' +
+      ms +
+      '" integrity="' +
+      mint +
+      '" crossorigin="anonymous"></script><script>' +
+      "window.addEventListener('load',function(){try{if(typeof mermaid==='undefined')return;" +
+      "mermaid.initialize({startOnLoad:false,securityLevel:'strict',theme:'neutral'});" +
+      "var r=document.querySelector('main.cr-export');if(!r)return;var n=r.querySelectorAll('pre.mermaid');" +
+      "if(!n.length)return;mermaid.run({nodes:n,suppressErrors:true});}catch(e){}});" +
+      "</script></body></html>\n"
     );
   }
 
@@ -418,14 +479,21 @@
       ratio = getScrollRatio(editor);
     }
     preview.innerHTML = safe;
-    if (ratio !== null) {
-      window.requestAnimationFrame(function () {
-        if (!isSyncScrollActive()) return;
-        isApplyingSyncScroll = true;
-        setScrollFromRatio(preview, ratio);
-        isApplyingSyncScroll = false;
-      });
-    }
+    var ratioAfter = ratio;
+    window.requestAnimationFrame(function () {
+      Promise.resolve()
+        .then(function () {
+          return runMermaidOnPreview();
+        })
+        .finally(function () {
+          if (ratioAfter === null || !isSyncScrollActive()) return;
+          window.requestAnimationFrame(function () {
+            isApplyingSyncScroll = true;
+            setScrollFromRatio(preview, ratioAfter);
+            isApplyingSyncScroll = false;
+          });
+        });
+    });
   }
 
   function scheduleRender() {
